@@ -1,2377 +1,2365 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Voyana Research Surveys</title>
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    /* ── 1. CSS VARIABLES & RESET ────────────────────────────────────── */
-    :root {
-      /* Backgrounds */
-      --color-bg-primary:      #F5F0E8;   /* warm parchment */
-      --color-bg-secondary:    #EDE8DC;   /* slightly deeper cream */
-      --color-bg-card:         #FAF7F2;   /* near-white warm */
-      --color-warm-white:      #FFFDF8;   /* warm white */
-
-      /* Greens — primary brand color */
-      --color-green-dark:      #1F3B2F;   /* deep forest green */
-      --color-green-mid:       #2E5440;   /* mid green */
-      --color-green-light:     #4A7C60;   /* lighter green */
-
-      /* Text */
-      --color-text-primary:    #1A2E22;   /* near-black green-tinted */
-      --color-text-secondary:  #5C6B5E;   /* muted green-grey */
-      --color-text-muted:      #9AA89C;   /* soft grey-green */
-
-      /* Warm Accents */
-      --color-sand:            #C8B89A;   /* warm sand */
-      --color-sand-light:      #E0D5C4;   /* light sand */
-      --color-error:           #A34839;   /* warm brick red for validation errors */
-      --color-error-bg:        #FAF3F2;
-
-      /* Interactive */
-      --color-cta-bg:          #1F3B2F;
-      --color-cta-text:        #F5F0E8;
-      --color-cta-hover:       #2E5440;
-      --color-active:          #4A7C60;
-      --color-progress:        #2E5440;
-      --color-focus-ring:      rgba(46, 84, 64, 0.25);
-
-      /* Shadows */
-      --shadow-card:   0 4px 20px rgba(31, 59, 47, 0.05);
-      --shadow-hover:  0 12px 32px rgba(31, 59, 47, 0.1);
-
-      /* Fonts */
-      --font-display: 'Cormorant Garamond', Georgia, serif;
-      --font-body:    'DM Sans', sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: linear-gradient(160deg, #F5F0E8 0%, #EDE5D4 100%);
-      font-family: var(--font-body);
-      color: var(--color-text-primary);
-      min-height: 100vh;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── 2. LAYOUT & CONTAINER STRUCTURE ──────────────────────────────── */
-    #app {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .landing-container {
-      max-width: 1100px;
-      width: 100%;
-      padding: 60px 24px;
-      text-align: center;
-      margin: 0 auto;
-    }
-
-    .survey-wrapper {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 24px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ── 3. LANDING SCREEN ────────────────────────────────────────────── */
-    .landing-header {
-      margin-bottom: 60px;
-    }
-
-    .landing-logo {
-      font-family: var(--font-display);
-      font-size: 2.2rem;
-      font-style: italic;
-      font-weight: 600;
-      color: var(--color-green-dark);
-      margin-bottom: 16px;
-      letter-spacing: -0.01em;
-    }
-
-    .landing-title {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 500;
-      line-height: 1.1;
-      color: var(--color-green-dark);
-      margin-bottom: 24px;
-    }
-
-    .landing-subtitle {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--color-text-secondary);
-      max-width: 600px;
-      margin: 0 auto;
-      font-weight: 300;
-    }
-
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 24px;
-      margin-top: 40px;
-    }
-
-    .card-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .survey-card {
-      background: var(--color-bg-card);
-      border: 1px solid var(--color-sand-light);
-      border-radius: 16px;
-      padding: 40px 30px;
-      text-align: left;
-      box-shadow: var(--shadow-card);
-      transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-
-    .survey-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-hover);
-      border-color: var(--color-sand);
-    }
-
-    .card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--color-bg-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-green-dark);
-      margin-bottom: 24px;
-      font-size: 1.4rem;
-      transition: background 300ms ease;
-    }
-
-    .survey-card:hover .card-icon {
-      background: var(--color-green-dark);
-      color: var(--color-cta-text);
-    }
-
-    .card-title {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-style: italic;
-      font-weight: 500;
-      color: var(--color-green-dark);
-      margin-bottom: 12px;
-    }
-
-    .card-desc {
-      font-size: 0.95rem;
-      color: var(--color-text-secondary);
-      font-weight: 300;
-      line-height: 1.5;
-      margin-bottom: 30px;
-      flex-grow: 1;
-    }
-
-    .card-action {
-      display: inline-flex;
-      align-items: center;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--color-green-dark);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      gap: 8px;
-    }
-
-    .card-action svg {
-      transition: transform 300ms ease;
-    }
-
-    .survey-card:hover .card-action svg {
-      transform: translateX(6px);
-    }
-
-    /* ── 4. SURVEY CONTAINER & HEADER ─────────────────────────────────── */
-    .survey-header {
-      margin-bottom: 32px;
-      width: 100%;
-    }
-
-    .brand-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      width: 100%;
-    }
-
-    .logo-link {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-style: italic;
-      font-weight: 600;
-      color: var(--color-green-dark);
-      text-decoration: none;
-    }
-
-    .survey-name {
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--color-text-secondary);
-      background: var(--color-bg-secondary);
-      padding: 6px 14px;
-      border-radius: 100px;
-    }
-
-    .category-stepper {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-weight: 500;
-      font-size: clamp(1.8rem, 4vw, 2.4rem);
-      color: var(--color-green-dark);
-      line-height: 1.2;
-    }
-
-    .step-indicator {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── 5. PROGRESS BAR ──────────────────────────────────────────────── */
-    .progress-track {
-      background: var(--color-sand-light);
-      border-radius: 100px;
-      height: 6px;
-      width: 100%;
-      overflow: hidden;
-      margin-bottom: 40px;
-    }
-
-    .progress-fill {
-      background: linear-gradient(90deg, var(--color-green-dark), var(--color-green-light));
-      border-radius: 100px;
-      height: 100%;
-      width: 0%;
-      transition: width 400ms ease;
-    }
-
-    /* ── 6. QUESTION CARD & CONTAINER ─────────────────────────────────── */
-    .questions-container {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      width: 100%;
-    }
-
-    .question-card {
-      background: var(--color-bg-card);
-      border: 1px solid var(--color-sand-light);
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: var(--shadow-card);
-      width: 100%;
-      transition: border-color 300ms, background-color 300ms;
-      opacity: 0;
-      transform: translateY(16px);
-      animation: cardEnter 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes cardEnter {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .question-card.error {
-      border-color: var(--color-error);
-      background-color: var(--color-error-bg);
-    }
-
-    .question-text {
-      font-size: clamp(1rem, 2vw, 1.1rem);
-      font-weight: 500;
-      color: var(--color-text-primary);
-      margin-bottom: 20px;
-      display: block;
-    }
-
-    .question-text .required-star {
-      color: var(--color-error);
-      margin-left: 4px;
-    }
-
-    .error-message {
-      color: var(--color-error);
-      font-size: 0.85rem;
-      margin-top: 10px;
-      display: none;
-      align-items: center;
-      gap: 6px;
-      font-weight: 500;
-    }
-
-    .question-card.error .error-message {
-      display: flex;
-    }
-
-    /* ── 7. INPUT COMPONENTS ─────────────────────────────────────────── */
-    
-    /* Text inputs & Textarea */
-    input[type="text"], textarea {
-      width: 100%;
-      background: var(--color-warm-white);
-      border: 1.5px solid var(--color-sand-light);
-      color: var(--color-text-primary);
-      border-radius: 8px;
-      padding: 14px 16px;
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      transition: border-color 200ms, box-shadow 200ms;
-    }
-
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--color-green-light);
-      box-shadow: 0 0 0 3.5px var(--color-focus-ring);
-      outline: none;
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    /* Dropdown / Select */
-    .select-wrapper {
-      position: relative;
-      width: 100%;
-    }
-
-    select {
-      width: 100%;
-      background: var(--color-warm-white);
-      border: 1.5px solid var(--color-sand-light);
-      color: var(--color-text-primary);
-      border-radius: 8px;
-      padding: 14px 16px;
-      font-family: var(--font-body);
-      font-size: 0.95rem;
-      cursor: pointer;
-      appearance: none;
-      -webkit-appearance: none;
-      transition: border-color 200ms, box-shadow 200ms;
-    }
-
-    select:focus {
-      border-color: var(--color-green-light);
-      box-shadow: 0 0 0 3.5px var(--color-focus-ring);
-      outline: none;
-    }
-
-    .select-wrapper::after {
-      content: "";
-      position: absolute;
-      right: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 10px;
-      height: 6px;
-      background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231A2E22' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      pointer-events: none;
-    }
-
-    /* Option Pills (Radio & Checkbox Group) */
-    .pills-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .option-pill {
-      background: var(--color-warm-white);
-      border: 1.5px solid var(--color-sand-light);
-      border-radius: 8px;
-      color: var(--color-text-primary);
-      cursor: pointer;
-      padding: 14px 18px;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      position: relative;
-      transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
-      user-select: none;
-    }
-
-    .option-pill:hover {
-      border-color: var(--color-green-light);
-      background: var(--color-bg-card);
-      transform: scale(1.005);
-    }
-
-    .option-pill:focus-visible {
-      outline: none;
-      border-color: var(--color-green-light);
-      box-shadow: 0 0 0 3.5px var(--color-focus-ring);
-    }
-
-    .pill-indicator {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--color-sand);
-      transition: all 200ms ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    /* Radio indicator shape */
-    .type-radio .pill-indicator {
-      border-radius: 50%;
-    }
-
-    /* Checkbox indicator shape */
-    .type-checkbox .pill-indicator {
-      border-radius: 4px;
-    }
-
-    .option-pill.selected {
-      background: var(--color-bg-secondary);
-      border-color: var(--color-green-dark);
-      font-weight: 500;
-    }
-
-    .option-pill.selected .pill-indicator {
-      border-color: var(--color-green-dark);
-      background: var(--color-green-dark);
-    }
-
-    .option-pill.selected .pill-indicator::after {
-      content: "";
-      display: block;
-    }
-
-    /* Dot for radio */
-    .type-radio .option-pill.selected .pill-indicator::after {
-      width: 6px;
-      height: 6px;
-      background: var(--color-cta-text);
-      border-radius: 50%;
-    }
-
-    /* Checkmark for checkbox */
-    .type-checkbox .option-pill.selected .pill-indicator::after {
-      width: 8px;
-      height: 5px;
-      border-left: 2px solid var(--color-cta-text);
-      border-bottom: 2px solid var(--color-cta-text);
-      transform: rotate(-45deg) translate(1px, -1px);
-    }
-
-    /* Star rating */
-    .star-rating-container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .star-row {
-      display: inline-flex;
-      gap: 8px;
-    }
-
-    .star {
-      font-size: 2.2rem;
-      color: var(--color-sand-light);
-      cursor: pointer;
-      transition: transform 150ms ease, color 150ms ease;
-      user-select: none;
-    }
-
-    .star:hover {
-      transform: scale(1.15);
-    }
-
-    .star.hovered, .star.filled {
-      color: var(--color-green-mid);
-    }
-
-    .star:focus-visible {
-      outline: none;
-      transform: scale(1.1);
-    }
-
-    .rating-label {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--color-text-secondary);
-      min-width: 80px;
-    }
-
-    /* ── 8. BUTTONS & NAVIGATION FOOTER ───────────────────────────────── */
-    .navigation-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 40px;
-      width: 100%;
-      gap: 16px;
-    }
-
-    .btn {
-      font-family: var(--font-body);
-      font-weight: 500;
-      font-size: 0.95rem;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 48px;
-      padding: 12px 28px;
-      border-radius: 100px;
-      user-select: none;
-    }
-
-    .btn:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 3.5px var(--color-focus-ring);
-    }
-
-    .btn-primary {
-      background: var(--color-cta-bg);
-      color: var(--color-cta-text);
-      border: none;
-      box-shadow: 0 2px 8px rgba(31, 59, 47, 0.15);
-    }
-
-    .btn-primary:hover {
-      background: var(--color-cta-hover);
-      box-shadow: 0 4px 16px rgba(31, 59, 47, 0.25);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.97);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--color-green-dark);
-      border: 1.5px solid var(--color-green-dark);
-    }
-
-    .btn-secondary:hover {
-      background: var(--color-bg-secondary);
-    }
-
-    .btn-secondary:active {
-      transform: scale(0.97);
-    }
-
-    .btn-back-home {
-      background: transparent;
-      color: var(--color-text-secondary);
-      border: 1.5px solid var(--color-sand);
-    }
-
-    .btn-back-home:hover {
-      background: var(--color-bg-secondary);
-      border-color: var(--color-text-secondary);
-    }
-
-    /* ── 9. THANK-YOU SCREEN ─────────────────────────────────────────── */
-    .thankyou-card {
-      background: var(--color-bg-card);
-      border: 1px solid var(--color-sand-light);
-      border-radius: 24px;
-      padding: 60px 40px;
-      text-align: center;
-      box-shadow: var(--shadow-card);
-      max-width: 600px;
-      width: 100%;
-      opacity: 0;
-      transform: scale(0.96);
-      animation: thankyouEnter 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes thankyouEnter {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .success-icon-wrapper {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: var(--color-bg-secondary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--color-green-dark);
-      margin: 0 auto 32px;
-      font-size: 2.2rem;
-    }
-
-    .thankyou-title {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-weight: 500;
-      font-size: 2.6rem;
-      color: var(--color-green-dark);
-      margin-bottom: 16px;
-    }
-
-    .thankyou-text {
-      color: var(--color-text-secondary);
-      font-size: 1.05rem;
-      margin-bottom: 40px;
-      font-weight: 300;
-      line-height: 1.6;
-    }
-
-    /* ── 10. RESPONSIVE BREAKPOINTS & ADAPTIVE LAYOUT ────────────────── */
-    
-    /* Small mobiles */
-    @media (max-width: 640px) {
-      .survey-wrapper {
-        padding: 24px 16px;
-      }
-      .question-card {
-        padding: 20px;
-      }
-      .btn {
-        flex-grow: 1;
-        font-size: 0.9rem;
-      }
-      .navigation-footer {
-        flex-direction: column-reverse;
-      }
-      .navigation-footer .btn {
-        width: 100%;
-      }
-    }
-
-    /* Tablet and Small Desktop default layout (Centered single column) */
-    @media (min-width: 641px) and (max-width: 1440px) {
-      .survey-wrapper {
-        max-width: 680px;
-      }
-    }
-
-    /* Wide Desktop: Two-column layout */
-    @media (min-width: 1441px) {
-      #app {
-        flex-direction: row;
-        align-items: stretch;
-      }
-
-      .survey-wrapper {
-        display: grid;
-        grid-template-columns: 380px 1fr;
-        max-width: 100%;
-        width: 100%;
-        padding: 0;
-        min-height: 100vh;
-      }
-
-      .survey-sidebar {
-        background-color: var(--color-bg-secondary);
-        border-right: 1px solid var(--color-sand);
-        padding: 60px 48px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-      }
-
-      .survey-main {
-        background-color: var(--color-bg-primary);
-        padding: 60px 80px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        min-height: 100vh;
-      }
-
-      .questions-container, .navigation-footer {
-        max-width: 720px;
-        width: 100%;
-      }
-
-      /* Hide duplicate header elements and adjust positions */
-      .survey-header {
-        margin-bottom: 0;
-      }
-      
-      .brand-bar {
-        margin-bottom: 40px;
-      }
-
-      .progress-track {
-        margin-bottom: 0;
-      }
-
-      .survey-sidebar-inner {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div id="app"></div>
-
-  <script>
-    // ── 1. SURVEY DATA ──────────────────────────────────────────────
-    // Embedded pre-parsed JavaScript objects
-    const SURVEYS = {
-  "cafe": [
-    {
-      "category": "Business Profile",
-      "questions": [
-        {
-          "q": "Pls share your restraunt / café name, location, social media handle e.g. instagram, website etc.",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "How would you classify your establishment?",
-          "type": "dropdown",
-          "options": [
-            "Fine dining restaurant",
-            "Casual dining restaurant",
-            "Cafe / coffee shop",
-            "Dhaba / local eatery",
-            "Street food stall / cart",
-            "Rooftop restaurant",
-            "Heritage / themed restaurant",
-            "Bar & restaurant",
-            "Bakery & cafe",
-            "Cloud kitchen / delivery only",
-            "Multi-cuisine buffet",
-            "Specialty cuisine restaurant"
-          ]
-        },
-        {
-          "q": "How long have you been operating?",
-          "type": "dropdown",
-          "options": [
-            "Less than 1 year",
-            "1–2 years",
-            "3–5 years",
-            "6–10 years",
-            "More than 10 years"
-          ]
-        },
-        {
-          "q": "What is your average monthly revenue?",
-          "type": "dropdown",
-          "options": [
-            "Below ₹1 lakh",
-            "₹1L – ₹3L",
-            "₹3L – ₹7L",
-            "₹7L – ₹15L",
-            "₹15L – ₹30L",
-            "Above ₹30L",
-            "Prefer not to say"
-          ]
-        },
-        {
-          "q": "What percentage of your customers are tourists vs locals?",
-          "type": "dropdown",
-          "options": [
-            "90%+ tourists",
-            "70–90% tourists",
-            "50–70% tourists",
-            "30–50% tourists",
-            "10–30% tourists",
-            "Less than 10% tourists"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Customer Attraction & Discovery",
-      "questions": [
-        {
-          "q": "How do tourists currently find your restaurant?",
-          "type": "dropdown",
-          "options": [
-            "Walking past and seeing the signboard",
-            "Google Maps / Google Search",
-            "Zomato listing",
-            "Swiggy listing",
-            "TripAdvisor",
-            "Instagram / Facebook",
-            "Their hotel / homestay recommended us",
-            "A travel guide or travel blog",
-            "Tour operator or local guide brought them",
-            "Word of mouth from other tourists",
-            "Recommendation from a taxi / auto driver",
-            "Travel app (Thrillophilia, MakeMyTrip, etc.)"
-          ]
-        },
-        {
-          "q": "Do you actively promote your restaurant to tourists?",
-          "type": "dropdown",
-          "options": [
-            "Yes, very actively — it's a top priority",
-            "Yes, somewhat — we do basic things",
-            "We rely on organic discovery, no active promotion",
-            "No, we focus only on local regulars"
-          ]
-        },
-        {
-          "q": "What promotional activities do you currently do to attract tourists?",
-          "type": "dropdown",
-          "options": [
-            "Maintain Google My Business listing",
-            "Post regularly on Instagram / Facebook",
-            "Run paid ads on social media",
-            "List on Zomato / Swiggy",
-            "List on TripAdvisor",
-            "Partner with nearby hotels / homestays",
-            "Pay local guides or taxi drivers for referrals",
-            "Put up banners or boards near tourist areas",
-            "Offer tourist-specific combo menus or discounts",
-            "Use a travel or tourism app",
-            "Do nothing specific — tourists find us organically",
-            "Participate in local food festivals or events"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Current App & Digital Presence",
-      "questions": [
-        {
-          "q": "Are you currently listed on any food delivery or discovery apps?",
-          "type": "dropdown",
-          "options": [
-            "Zomato (delivery)",
-            "Zomato (dine-in discovery)",
-            "Swiggy (delivery)",
-            "Swiggy Dineout",
-            "TripAdvisor",
-            "Google My Business",
-            "MagicPin",
-            "Dineout",
-            "EazyDiner",
-            "No, I am not listed on any app",
-            "A local/regional travel or food app"
-          ]
-        },
-        {
-          "q": "If you use Zomato / Swiggy, what percentage of your total revenue comes from these platforms?",
-          "type": "dropdown",
-          "options": [
-            "0% (not using them)",
-            "Less than 10%",
-            "10–25%",
-            "25–40%",
-            "40–60%",
-            "More than 60%"
-          ]
-        },
-        {
-          "q": "What is the commission you currently pay to food delivery / listing apps?",
-          "type": "dropdown",
-          "options": [
-            "I don't know the exact figure",
-            "Less than 15%",
-            "15–20%",
-            "20–25%",
-            "25–30%",
-            "More than 30%",
-            "I don't use any such platforms"
-          ]
-        },
-        {
-          "q": "Do you feel the commission charged by current platforms is fair?",
-          "type": "rating",
-          "options": [
-            "1 – Very unfair, it hurts my margins seriously",
-            "2 – Unfair but I have no choice",
-            "3 – Neutral / acceptable",
-            "4 – Fair considering the volume they bring",
-            "5 – Very fair, worth every rupee"
-          ]
-        },
-        {
-          "q": "What is the biggest problem with platforms like Zomato / Swiggy for your business?",
-          "type": "dropdown",
-          "options": [
-            "Commission is too high",
-            "Customers only see price, not our quality or story",
-            "Too many competitors listed together",
-            "Platform controls discounting and we are forced to offer deals",
-            "No direct relationship with the customer",
-            "Ratings and reviews are hard to manage",
-            "Payment settlement is slow",
-            "Customer data is not shared with us",
-            "Platform changes rules without notice",
-            "High cost of onboarding / subscription",
-            "We depend too much on them for visibility"
-          ]
-        },
-        {
-          "q": "If a travel / tourism app approached you to list your restaurant for tourist discovery, would you consider it?",
-          "type": "dropdown",
-          "options": [
-            "Yes, absolutely — would join immediately",
-            "Yes, if the commission is reasonable",
-            "Maybe — depends on the platform and reach",
-            "Probably not — I already have enough business",
-            "No — not interested"
-          ]
-        },
-        {
-          "q": "What would make you trust and join a new travel / tourism app?",
-          "type": "dropdown",
-          "options": [
-            "Proof of tourist user base in my area",
-            "Low or zero commission model",
-            "My own dashboard to manage bookings and reviews",
-            "Direct customer data access",
-            "Free trial period",
-            "Endorsement from tourism board or government",
-            "Other restaurant owners in my area already using it",
-            "Strong customer support team",
-            "Transparent payment and settlement process",
-            "Integration with Google Maps / existing platforms"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Revenue, Margins & Pricing",
-      "questions": [
-        {
-          "q": "What is the maximum commission / fee you would be comfortable paying a travel app for a tourist customer referral?",
-          "type": "dropdown",
-          "options": [
-            "0% — I want a flat monthly subscription instead",
-            "Up to 5%",
-            "5–10%",
-            "10–15%",
-            "15–20%",
-            "More than 20% if volume is high enough"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Tourist Customer Experience",
-      "questions": [
-        {
-          "q": "What do tourist customers complain about most at your restaurant?",
-          "type": "dropdown",
-          "options": [
-            "Prices being too high",
-            "Slow service",
-            "Language barrier",
-            "Food not matching what was shown online / on menu",
-            "Hygiene concerns",
-            "Not knowing what to order — no local food guidance",
-            "Menu not having prices displayed clearly",
-            "Difficulty in making payment (no card / UPI accepted)",
-            "Waitlist / no reservation system",
-            "Not enough vegetarian or dietary-specific options",
-            "Nothing major — tourists are generally satisfied"
-          ]
-        },
-        {
-          "q": "What do tourist customers appreciate most about your restaurant?",
-          "type": "dropdown",
-          "options": [
-            "Authentic local cuisine",
-            "Good value for money",
-            "Friendly and helpful staff",
-            "Scenic or unique ambience",
-            "Fast service",
-            "Variety of options on menu",
-            "Hygienic and clean environment",
-            "Good reviews on Google / Zomato",
-            "Local food expertise — staff recommends well",
-            "Convenient location near tourist spots",
-            "Unique experience they can't find elsewhere"
-          ]
-        },
-        {
-          "q": "Do you face problems with tourists making reservations and then not showing up (no-shows)?",
-          "type": "dropdown",
-          "options": [
-            "Yes, it's a significant problem",
-            "Yes, it happens occasionally",
-            "Rarely",
-            "No, we don't take reservations",
-            "We mostly do walk-in only"
-          ]
-        },
-        {
-          "q": "Do you get tourists who want to learn about the local cuisine or ingredients?",
-          "type": "dropdown",
-          "options": [
-            "Yes, very frequently",
-            "Yes, sometimes",
-            "Occasionally",
-            "Rarely",
-            "Never"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Operational Challenges",
-      "questions": [
-        {
-          "q": "What are your biggest operational challenges when serving tourist customers?",
-          "type": "dropdown",
-          "options": [
-            "Managing sudden rush (unpredictable tourist footfall)",
-            "Language and communication barrier",
-            "Staff not trained for tourist-facing service",
-            "Managing dietary restrictions and allergies",
-            "Keeping consistent food quality during rush hours",
-            "Managing online reviews — especially unfair ones",
-            "Lack of a reservation system causing chaos",
-            "Processing different payment methods (foreign cards, UPI)",
-            "Managing tourists who haggle over prices",
-            "Not enough staff during peak tourist season",
-            "Kitchen capacity constraints during high season"
-          ]
-        },
-        {
-          "q": "Do you face difficulty managing online reviews left by tourists?",
-          "type": "dropdown",
-          "options": [
-            "Yes, fake or unfair reviews are a serious problem",
-            "Yes, it's hard to respond to and manage reviews",
-            "Somewhat — occasional negative reviews",
-            "No, our ratings are generally positive",
-            "We don't actively monitor reviews"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Marketing & Visibility Needs",
-      "questions": [
-        {
-          "q": "What type of marketing support would most benefit your restaurant?",
-          "type": "dropdown",
-          "options": [
-            "Being featured in travel apps used by tourists",
-            "Being included in hotel / homestay recommendation lists",
-            "Being featured in curated travel itineraries",
-            "Social media content creation support",
-            "Professional food photography",
-            "Getting more Google reviews from verified visitors",
-            "Email marketing to tourists who visited the area",
-            "Appearing in food sections of travel blogs",
-            "SMS or WhatsApp campaigns to tourists in my area",
-            "Collaborating with travel influencers or food bloggers",
-            "Government tourism board listings"
-          ]
-        },
-        {
-          "q": "Have you ever collaborated with a hotel, homestay, or tour operator to bring in customers?",
-          "type": "dropdown",
-          "options": [
-            "Yes, formally — we have an agreement in place",
-            "Yes, informally — referrals happen but no formal deal",
-            "We have tried but it didn't work out",
-            "No, but we'd be very interested",
-            "No, and we haven't considered it"
-          ]
-        },
-        {
-          "q": "Would you pay to be a 'featured' or 'sponsored' restaurant on a travel discovery app?",
-          "type": "dropdown",
-          "options": [
-            "Yes, if the tourist user base is proven and large",
-            "Yes, if cost per customer acquired is lower than Zomato",
-            "Maybe — need more information",
-            "No — I rely on organic discovery",
-            "No — paid listings haven't worked for me in the past"
-          ]
-        },
-        {
-          "q": "How important is it for you to collect tourist customer data (email, phone, city of origin)?",
-          "type": "rating",
-          "options": [
-            "1 – Not important",
-            "2",
-            "3 – Somewhat useful for understanding our customer base",
-            "4",
-            "5 – Very important, I want to build a tourist customer database"
-          ]
-        },
-        {
-          "q": "Would access to tourist demand data for your area (peak travel months, popular tourist profiles) help you plan better?",
-          "type": "rating",
-          "options": [
-            "1 – Not useful",
-            "2",
-            "3 – Somewhat useful",
-            "4",
-            "5 – Very useful, I'd use this to plan staffing, menu, and marketing"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Future Plans & Expansion",
-      "questions": [
-        {
-          "q": "What is the single biggest obstacle to growing your restaurant's tourist business?",
-          "type": "dropdown",
-          "options": [
-            "Low visibility — tourists don't know we exist",
-            "High commissions on existing platforms",
-            "Inconsistent tourist footfall — too seasonal",
-            "Not enough staff or operational capacity",
-            "Difficulty building trust with tourists who are first-time visitors",
-            "Competition from larger / more well-known restaurants",
-            "Lack of marketing knowledge or budget",
-            "Language and communication barriers",
-            "No reservation system to manage demand",
-            "Government or licensing issues"
-          ]
-        },
-        {
-          "q": "If a travel app could solve one specific problem for your restaurant, what would you want it to solve?",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "Would you be interested in a restaurant-focused dashboard that shows you tourist trends, peak times, and customer preferences in your area?",
-          "type": "rating",
-          "options": [
-            "1 – Not interested",
-            "2",
-            "3 – Somewhat interested",
-            "4",
-            "5 – Very interested, I would pay for this"
-          ]
-        },
-        {
-          "q": "How likely are you to recommend a travel app to fellow restaurant owners if it genuinely helped your tourist business?",
-          "type": "rating",
-          "options": [
-            "1 – Very unlikely",
-            "2",
-            "3 – Might mention it",
-            "4",
-            "5 – Would actively recommend to every restaurant owner I know"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "App Feature Wishlist",
-      "questions": [
-        {
-          "q": "Which of the following features would be most valuable to you in a travel app?",
-          "type": "dropdown",
-          "options": [
-            "Tourist discovery listing (appear in traveller searches)",
-            "Table reservation / pre-booking from tourists",
-            "Tourist demand analytics for my area",
-            "Featured placement in travel itineraries",
-            "Integration with Google Maps",
-            "Verified review system from actual visitors",
-            "Ability to respond to reviews publicly",
-            "Tourist-facing menu with photos and dietary labels",
-            "In-app promotional offers / deals management",
-            "Customer contact data access",
-            "Group booking management",
-            "Revenue dashboard and booking reports",
-            "QR code menu for tourists",
-            "Multilingual menu display (English, Hindi, regional languages)",
-            "Low / zero commission model",
-            "Flat monthly subscription option"
-          ]
-        },
-        {
-          "q": "Would you benefit from a feature that lets tourists pre-order from your menu before arriving?",
-          "type": "dropdown",
-          "options": [
-            "Yes, it would reduce wait times and improve experience",
-            "Yes for large groups especially",
-            "Maybe — depends on kitchen workflow",
-            "No — we prefer fresh orders on arrival",
-            "No — too complex to implement"
-          ]
-        },
-        {
-          "q": "Would a loyalty or rewards feature for repeat tourist visitors be useful for your restaurant?",
-          "type": "dropdown",
-          "options": [
-            "Yes, tourists do revisit — this would help retention",
-            "Yes, interesting idea worth exploring",
-            "Unlikely — tourists usually visit once",
-            "No — repeat visits are not our primary goal"
-          ]
-        },
-        {
-          "q": "What is the maximum monthly fee you would pay for a comprehensive travel app subscription for restaurants?",
-          "type": "dropdown",
-          "options": [
-            "₹0 — commission only model preferred",
-            "₹500 – ₹1,000 per month",
-            "₹1,000 – ₹2,500 per month",
-            "₹2,500 – ₹5,000 per month",
-            "Above ₹5,000 if value is proven",
-            "Depends entirely on number of tourist customers it brings"
-          ]
-        }
-      ]
-    }
-  ],
-  "tour": [
-    {
-      "category": "Business Profile",
-      "questions": [
-        {
-          "q": "What type of services do you provide?",
-          "type": "dropdown",
-          "options": [
-            "Tour Operator",
-            "Activity Provider",
-            "Transport Provider",
-            "Rental Service",
-            "Other"
-          ]
-        },
-        {
-          "q": "How do customers currently discover your services?",
-          "type": "dropdown",
-          "options": [
-            "Word of mouth",
-            "Social media (Instagram/FB)",
-            "Google Search/Maps",
-            "Local guides/Referrals",
-            "Other platforms"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Challenges",
-      "questions": [
-        {
-          "q": "What is your biggest business challenge?",
-          "type": "dropdown",
-          "options": [
-            "Finding new customers",
-            "High marketing/advertising costs",
-            "Seasonal demand fluctuations",
-            "Managing bookings & scheduling",
-            "Competition from big platforms"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "App Validation",
-      "questions": [
-        {
-          "q": "Would you list your services on a tourism comparison platform?",
-          "type": "rating",
-          "options": []
-        },
-        {
-          "q": "What would encourage you to join such a platform?",
-          "type": "dropdown",
-          "options": [
-            "More direct booking volume",
-            "Lower booking commissions",
-            "Better brand visibility",
-            "Easy digital management tools",
-            "Access to tourist travel data"
-          ]
-        },
-        {
-          "q": "What tools would help your business most?",
-          "type": "dropdown",
-          "options": [
-            "Online booking & payment system",
-            "Customer reviews manager",
-            "AI pricing recommendations",
-            "Real-time demand analytics dashboard",
-            "SMS/WhatsApp reminders for bookings"
-          ]
-        },
-        {
-          "q": "Would you like customers to compare your services with competitors?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Revenue Validation",
-      "questions": [
-        {
-          "q": "Would you pay for premium visibility or featured listings?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        },
-        {
-          "q": "What concerns would you have before joining?",
-          "type": "dropdown",
-          "options": [
-            "High setup or monthly costs",
-            "Technical difficulty of using the app",
-            "Customer data privacy",
-            "Whether tourists will actually use it",
-            "Other"
-          ]
-        },
-        {
-          "q": "What payment model do you prefer?",
-          "type": "dropdown",
-          "options": [
-            "Flat monthly subscription",
-            "Commission per booking",
-            "Hybrid (low subscription + low commission)",
-            "Pay-per-lead / Pay-per-click"
-          ]
-        },
-        {
-          "q": "Would analytics about customer trends & demand help your business?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        },
-        {
-          "q": "Would AI-based pricing recommendations help you?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Product Experience",
-      "questions": [
-        {
-          "q": "Would you join as an early launch partner?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "",
-      "questions": [
-        {
-          "q": "Existing tools or app",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "Feedback",
-          "type": "text",
-          "options": []
-        }
-      ]
-    }
-  ],
-  "tourist": [
-    {
-      "category": "Traveller Profile",
-      "questions": [
-        {
-          "q": "Lets start with you age first, you could tell us, pls:)",
-          "type": "dropdown",
-          "options": [
-            "Under 18",
-            "18–24",
-            "25–45",
-            "45–54",
-            "55+"
-          ]
-        },
-        {
-          "q": "How often do you travel within India per year?",
-          "type": "dropdown",
-          "options": [
-            "This will be my first trip",
-            "Once a year",
-            "2–3 times a year",
-            "4–6 times a year",
-            "7 or more times a year"
-          ]
-        },
-        {
-          "q": "What is your approximate annual household income?",
-          "type": "dropdown",
-          "options": [
-            "Below ₹5 lakh",
-            "₹5L – ₹10L",
-            "₹10L – ₹20L",
-            "₹20L – ₹50L",
-            "Above ₹50L",
-            "Prefer not to say"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Destination Discovery",
-      "questions": [
-        {
-          "q": "Which platform most influences your travel decisions?",
-          "type": "dropdown",
-          "options": [
-            "Instagram",
-            "YouTube",
-            "Facebook",
-            "Twitter / X",
-            "Travel blogs",
-            "None — personal recommendations",
-            "Recommendations from friends or family"
-          ]
-        },
-        {
-          "q": "How important is 'Instagram-worthiness' when choosing a destination?",
-          "type": "rating",
-          "options": [
-            "1 – Not important at all",
-            "2",
-            "3 – Somewhat important",
-            "4",
-            "5 – Very important"
-          ]
-        },
-        {
-          "q": "How far in advance do you start researching a trip?",
-          "type": "dropdown",
-          "options": [
-            "Same week I want to go",
-            "1–2 weeks before",
-            "About 1 month before",
-            "2–3 months before",
-            "3–6 months before",
-            "6+ months before"
-          ]
-        },
-        {
-          "q": "Have you ever regretted a trip because it wasn't what you expected online?",
-          "type": "dropdown",
-          "options": [
-            "Yes, multiple times",
-            "Yes, once",
-            "No, expectations matched reality",
-            "No, I always research thoroughly"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Booking Behaviour",
-      "questions": [
-        {
-          "q": "How do you currently book your trips?",
-          "type": "dropdown",
-          "options": [
-            "Fully self-planned",
-            "Full package from an app/website",
-            "Through a traditional travel agent",
-            "Directly with a local operator via WhatsApp",
-            "Mix of self-planned + operator",
-            "Rely on friend/family to plan"
-          ]
-        },
-        {
-          "q": "Which platforms have you used to book a trip in the past year?",
-          "type": "dropdown",
-          "options": [
-            "MakeMyTrip",
-            "Goibibo",
-            "EaseMyTrip",
-            "Cleartrip",
-            "Yatra.com",
-            "Airbnb",
-            "Thomas Cook",
-            "Local/independent travel agent",
-            "Other"
-          ]
-        },
-        {
-          "q": "How much time do you spend researching before confirming a booking?",
-          "type": "dropdown",
-          "options": [
-            "Less than 1 hour",
-            "1–3 hours",
-            "3–6 hours",
-            "6–12 hours",
-            "More than 12 hours over multiple days"
-          ]
-        },
-        {
-          "q": "What is your biggest frustration with how you currently book tours?",
-          "type": "dropdown",
-          "options": [
-            "Hidden costs discovered late",
-            "Unreliable/unverified operators",
-            "No easy way to compare packages",
-            "Too many platforms to check",
-            "Unclear cancellation policies",
-            "Lack of authentic reviews",
-            "No customisation option",
-            "Hard to communicate with operators",
-            "No single platform for all packages",
-            "Slow or no customer support"
-          ]
-        },
-        {
-          "q": "Do you prefer booking everything through one platform or separately?",
-          "type": "dropdown",
-          "options": [
-            "Strongly prefer one platform",
-            "Prefer one but fine with separate",
-            "No strong preference",
-            "Prefer to research and book separately",
-            "Depends on the trip"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Budget & Pricing",
-      "questions": [
-        {
-          "q": "How much do hidden charges bother you?",
-          "type": "rating",
-          "options": [
-            "1 – Doesn't bother me",
-            "2",
-            "3 – Bothers me somewhat",
-            "4",
-            "5 – It's a dealbreaker"
-          ]
-        },
-        {
-          "q": "Would you prefer all-inclusive price over low headline + add-ons?",
-          "type": "dropdown",
-          "options": [
-            "Yes – one transparent total price",
-            "No – prefer low headline, pay for what I use",
-            "No preference",
-            "Depends on size of add-ons"
-          ]
-        },
-        {
-          "q": "What refund policy is acceptable if you cancel 45 days before?",
-          "type": "dropdown",
-          "options": [
-            "Full 100% refund",
-            "75–90% refund",
-            "50% refund",
-            "Any refund is acceptable",
-            "Non-refundable is ok if price was low",
-            "Depends on reason for cancellation"
-          ]
-        },
-        {
-          "q": "Would group discounts influence you to travel with a larger group?",
-          "type": "dropdown",
-          "options": [
-            "Yes, definitely",
-            "Probably yes",
-            "Maybe, depending on the discount",
-            "No, group size isn't influenced by pricing"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Trust & Tour Operators",
-      "questions": [
-        {
-          "q": "Have you ever booked through a small/local tour operator?",
-          "type": "dropdown",
-          "options": [
-            "Yes, multiple times – good experiences",
-            "Yes, multiple times – mixed results",
-            "Yes, once",
-            "No, but I would consider it",
-            "No – I don't trust small operators",
-            "No – I didn't know how to find them"
-          ]
-        },
-        {
-          "q": "What signals make you trust a tour operator?",
-          "type": "dropdown",
-          "options": [
-            "Positive reviews from verified travellers",
-            "Number of years in business",
-            "Government/official certification",
-            "Fast response to enquiries",
-            "Detailed and clear package description",
-            "Authentic-looking photos (not stock images)",
-            "Word of mouth from someone I know",
-            "Transparent refund/cancellation policy",
-            "Past booking count shown on profile",
-            "Physical address or office location visible"
-          ]
-        },
-        {
-          "q": "How important are traveller reviews when selecting an operator?",
-          "type": "rating",
-          "options": [
-            "1 – I don't rely on reviews",
-            "2",
-            "3 – Somewhat important",
-            "4",
-            "5 – Most important factor"
-          ]
-        },
-        {
-          "q": "Have you had a bad experience with a tour operator? What went wrong?",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "Would a 'verified by the platform' badge influence your decision?",
-          "type": "rating",
-          "options": [
-            "1 – No influence",
-            "2",
-            "3 – Somewhat influential",
-            "4",
-            "5 – Very strong influence"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Food & Dietary Needs",
-      "questions": [
-        {
-          "q": "How important is food quality and variety when choosing a package?",
-          "type": "rating",
-          "options": [
-            "1 – Food doesn't factor in",
-            "2",
-            "3 – Somewhat important",
-            "4",
-            "5 – It's a major deciding factor"
-          ]
-        },
-        {
-          "q": "Do you have any dietary preferences or restrictions?",
-          "type": "dropdown",
-          "options": [
-            "Vegetarian",
-            "Jain (no root vegetables)",
-            "Vegan",
-            "Halal",
-            "Gluten-free",
-            "No onion / no garlic",
-            "Nut allergy or other food allergy",
-            "No restrictions – I eat everything",
-            "Other"
-          ]
-        },
-        {
-          "q": "How clearly should a package describe meals?",
-          "type": "dropdown",
-          "options": [
-            "Every meal listed with menu",
-            "Meal type listed (breakfast, dinner) without menu",
-            "Just mention if meals are included or not",
-            "I don't need meal details – I'll sort food myself"
-          ]
-        },
-        {
-          "q": "Would you pay extra to ensure food catering to your dietary needs throughout?",
-          "type": "dropdown",
-          "options": [
-            "Yes, definitely",
-            "Yes, if charge is reasonable",
-            "Only if no alternatives available",
-            "No – I'll manage on my own"
-          ]
-        },
-        {
-          "q": "How important is trying local and regional cuisine during a trip?",
-          "type": "rating",
-          "options": [
-            "1 – I prefer familiar food",
-            "2",
-            "3 – I enjoy both",
-            "4",
-            "5 – Trying local food is a trip highlight"
-          ]
-        },
-        {
-          "q": "Would a filter to show operators who cater to specific diets be useful?",
-          "type": "dropdown",
-          "options": [
-            "Very useful – I always need this",
-            "Useful sometimes",
-            "Nice to have but not essential",
-            "Not relevant to me"
-          ]
-        },
-        {
-          "q": "Would you be interested in a food-focused travel package?",
-          "type": "dropdown",
-          "options": [
-            "Yes, as a dedicated food trip",
-            "Yes, as part of a larger trip",
-            "Maybe – depends on destination",
-            "Not particularly interested"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Activities & Experiences",
-      "questions": [
-        {
-          "q": "What types of activities do you look for in a trip?",
-          "type": "dropdown",
-          "options": [
-            "Trekking / hiking",
-            "Water sports (rafting, kayaking, surfing)",
-            "Cultural & heritage walks",
-            "Wildlife safaris & bird watching",
-            "Yoga & wellness retreats",
-            "Cooking classes & food tours",
-            "Photography-focused itineraries",
-            "Nightlife & social experiences",
-            "Spiritual & religious experiences",
-            "Extreme adventure sports",
-            "Village & rural experiences",
-            "Craft & art workshops",
-            "Cycling tours",
-            "Camping & night stays under stars"
-          ]
-        },
-        {
-          "q": "Do you prefer structured activities or free time to explore?",
-          "type": "rating",
-          "options": [
-            "1 – Fully planned schedule every day",
-            "2",
-            "3 – Mix of structured and free time",
-            "4",
-            "5 – Maximum free time to explore"
-          ]
-        },
-        {
-          "q": "How important is it to have a local guide during activities?",
-          "type": "dropdown",
-          "options": [
-            "Essential – I always want a guide",
-            "Nice to have but not required",
-            "Depends on the activity",
-            "I strongly prefer exploring without a guide"
-          ]
-        },
-        {
-          "q": "Would you be interested in community experiences (village events, learning crafts, visiting local family)?",
-          "type": "rating",
-          "options": [
-            "1 – Not interested",
-            "2",
-            "3 – Somewhat interested",
-            "4",
-            "5 – This is what I travel for"
-          ]
-        },
-        {
-          "q": "How important is it that activities match your physical fitness level?",
-          "type": "rating",
-          "options": [
-            "1 – I'll manage whatever is planned",
-            "2",
-            "3 – Somewhat important",
-            "4",
-            "5 – Very important, I need to know intensity"
-          ]
-        },
-        {
-          "q": "Would you book a whole trip around a single unique experience?",
-          "type": "dropdown",
-          "options": [
-            "Yes – I'd plan a whole trip around it",
-            "Sometimes, for the right experience",
-            "Rarely – I prefer balanced itineraries",
-            "No – I need multiple reasons to visit"
-          ]
-        },
-        {
-          "q": "How do you prefer activities to be presented in a package?",
-          "type": "dropdown",
-          "options": [
-            "Fixed list of activities in the price",
-            "A menu where I choose what I want",
-            "Core itinerary with optional paid add-ons",
-            "Completely flexible – I plan on arrival"
-          ]
-        },
-        {
-          "q": "Would a difficulty rating (easy/moderate/challenging) on activities help you choose?",
-          "type": "dropdown",
-          "options": [
-            "Very helpful – I'd filter by this",
-            "Somewhat helpful",
-            "Nice to have",
-            "Not necessary for me"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Accommodation",
-      "questions": [
-        {
-          "q": "What type of accommodation do you prefer?",
-          "type": "dropdown",
-          "options": [
-            "Dorm / budget hostel",
-            "Budget hotel (₹500–₹1,500/night)",
-            "Mid-range hotel (₹1,500–₹4,000/night)",
-            "Homestay with local family",
-            "Boutique / heritage property",
-            "Resort",
-            "Luxury hotel or villa",
-            "Camping / glamping",
-            "Unique stays (treehouses, houseboats, eco-lodges)"
-          ]
-        },
-        {
-          "q": "How important is accommodation quality relative to the overall trip experience?",
-          "type": "rating",
-          "options": [
-            "1 – I just need a place to sleep",
-            "2",
-            "3 – Moderately important",
-            "4",
-            "5 – Accommodation is core to my experience"
-          ]
-        },
-        {
-          "q": "How important is eco-friendly / sustainable accommodation to you?",
-          "type": "rating",
-          "options": [
-            "1 – Not a factor",
-            "2",
-            "3 – I consider it if convenient",
-            "4",
-            "5 – I actively seek sustainable options"
-          ]
-        },
-        {
-          "q": "Would you share accommodation with other travellers to reduce costs?",
-          "type": "dropdown",
-          "options": [
-            "Yes, always happy to share",
-            "Yes, if savings are 30%+ vs private",
-            "Only on specific trip types",
-            "No, I always prefer private accommodation"
-          ]
-        },
-        {
-          "q": "How important is Wi-Fi availability at accommodation?",
-          "type": "rating",
-          "options": [
-            "1 – I go off-grid by choice",
-            "2",
-            "3 – Nice to have",
-            "4",
-            "5 – Reliable Wi-Fi is non-negotiable"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "App & Platform Preferences",
-      "questions": [
-        {
-          "q": "What would most likely make you switch to a new travel app?",
-          "type": "dropdown",
-          "options": [
-            "Better or more competitive prices",
-            "Wider range of operators and packages",
-            "Verified and trustworthy operator profiles",
-            "Simpler and faster booking process",
-            "Ability to customise packages before paying",
-            "Better customer support",
-            "Secure escrow payment",
-            "Community of fellow travellers",
-            "AI-powered personalised recommendations",
-            "Transparent all-inclusive pricing"
-          ]
-        },
-        {
-          "q": "How important is a community feature to connect with others going on the same trip?",
-          "type": "rating",
-          "options": [
-            "1 – Not interested",
-            "2",
-            "3 – Somewhat interesting",
-            "4",
-            "5 – I'd actively use this"
-          ]
-        },
-        {
-          "q": "How much do you trust AI-generated travel itinerary recommendations?",
-          "type": "rating",
-          "options": [
-            "1 – I don't trust AI suggestions",
-            "2",
-            "3 – I'd consider them as one input",
-            "4",
-            "5 – I'd fully follow an AI recommendation"
-          ]
-        },
-        {
-          "q": "Would you pay ~₹150–₹200/month subscription for early access to deals and exclusive packages?",
-          "type": "dropdown",
-          "options": [
-            "Yes – I'd subscribe",
-            "Maybe – I'd try a free trial first",
-            "No – I wouldn't pay for a travel app subscription",
-            "Only if there were significant proven savings"
-          ]
-        },
-        {
-          "q": "Would you refer this app if it gave you travel credits per referral?",
-          "type": "dropdown",
-          "options": [
-            "Yes, definitely – I'd actively refer people",
-            "Probably – if I liked the app",
-            "Only if credits were significant (₹500+)",
-            "No – I don't share apps even for rewards"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Safety & Support",
-      "questions": [
-        {
-          "q": "Would you prefer travel insurance bundled into the package price?",
-          "type": "dropdown",
-          "options": [
-            "Yes – want it automatically included",
-            "Yes – if priced reasonably",
-            "No – I buy insurance separately",
-            "I don't buy travel insurance at all"
-          ]
-        },
-        {
-          "q": "Are there destinations in India you avoid due to safety concerns?",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "If an operator cancels last minute, what resolution would you expect?",
-          "type": "dropdown",
-          "options": [
-            "Full refund immediately",
-            "Full refund + alternative trip arranged by platform",
-            "Partial refund + credit for future booking",
-            "Platform mediates but I handle with operator",
-            "I'd manage directly with the operator"
-          ]
-        },
-        {
-          "q": "How comfortable are you sharing live location with the app for safety tracking?",
-          "type": "dropdown",
-          "options": [
-            "Very comfortable – safety first",
-            "Comfortable if it's optional",
-            "Somewhat uncomfortable – only in emergencies",
-            "Not comfortable at all – privacy matters more"
-          ]
-        }
-      ]
-    }
-  ],
-  "travel": [
-    {
-      "category": "Business Profile",
-      "questions": [
-        {
-          "q": "What type of travel business do you operate?",
-          "type": "dropdown",
-          "options": [
-            "Travel Agency",
-            "Tour Operator",
-            "DMC (Destination Management Company)",
-            "Independent Agent",
-            "Other"
-          ]
-        },
-        {
-          "q": "How long have you been in business?",
-          "type": "dropdown",
-          "options": [
-            "Less than 1 year",
-            "1–3 years",
-            "3–5 years",
-            "5–10 years",
-            "More than 10 years"
-          ]
-        },
-        {
-          "q": "Which destinations/categories do you specialize in?",
-          "type": "dropdown",
-          "options": [
-            "Domestic Tours",
-            "International Tours",
-            "Adventure Travel",
-            "Spiritual/Honeymoon",
-            "Luxury Packages",
-            "Customized Itineraries"
-          ]
-        },
-        {
-          "q": "Approximate monthly customer inquiries received?",
-          "type": "dropdown",
-          "options": [
-            "Less than 50",
-            "50–100",
-            "100–500",
-            "500–1000",
-            "More than 1000"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Challenges",
-      "questions": [
-        {
-          "q": "What are your biggest business challenges today?",
-          "type": "dropdown",
-          "options": [
-            "High B2C lead acquisition costs",
-            "High B2B agent platform commissions",
-            "Operational inefficiencies",
-            "Client trust & booking cancellations",
-            "Finding reliable local suppliers"
-          ]
-        },
-        {
-          "q": "How do customers currently discover your business?",
-          "type": "dropdown",
-          "options": [
-            "Google Maps / Local Search",
-            "Social Media (Instagram/FB)",
-            "Referrals / Word of mouth",
-            "B2B travel agents",
-            "Offline marketing/flyers"
-          ]
-        },
-        {
-          "q": "Do existing travel marketplaces provide enough value?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "No"
-          ]
-        },
-        {
-          "q": "What do you dislike most about existing travel platforms?",
-          "type": "textarea",
-          "options": []
-        }
-      ]
-    },
-    {
-      "category": "App Validation",
-      "questions": [
-        {
-          "q": "Would you list your packages on a package comparison platform?",
-          "type": "rating",
-          "options": []
-        },
-        {
-          "q": "What would motivate you most to join such a platform?",
-          "type": "dropdown",
-          "options": [
-            "More high-intent tourist enquiries",
-            "Lower commission models than standard sites",
-            "Tools to build and share custom itineraries",
-            "Verified customer review badges",
-            "Access to tourist trend data"
-          ]
-        },
-        {
-          "q": "Which feature would be most valuable for your business?",
-          "type": "dropdown",
-          "options": [
-            "AI itinerary builder & planner",
-            "Supplier directory / partner matching",
-            "Dynamic packaging & pricing tools",
-            "Customer CRM & booking dashboard",
-            "Integrated payment gateway"
-          ]
-        },
-        {
-          "q": "Would AI-based pricing and demand insights help your business?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "No"
-          ]
-        },
-        {
-          "q": "How important is customer trust & verification?",
-          "type": "rating",
-          "options": []
-        }
-      ]
-    },
-    {
-      "category": "Revenue Validation",
-      "questions": [
-        {
-          "q": "Which payment model would you prefer?",
-          "type": "dropdown",
-          "options": [
-            "Flat monthly subscription",
-            "Commission per booking",
-            "Hybrid model",
-            "Pay-per-lead / Pay-per-inquiry"
-          ]
-        },
-        {
-          "q": "Would you pay for premium tools if they get you more bookings or enquiries ?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        },
-        {
-          "q": "Which premium tools would you pay for?",
-          "type": "dropdown",
-          "options": [
-            "AI Pricing Recommendations",
-            "Verified Badge / Trusted Seller",
-            "SEO/Marketing boost",
-            "Advanced Analytics & Demand forecasts"
-          ]
-        },
-        {
-          "q": "What monthly amount would you realistically pay for useful business tools?",
-          "type": "dropdown",
-          "options": [
-            "₹0 (Free only)",
-            "Up to ₹1,000",
-            "₹1,000 – ₹2,500",
-            "₹2,500 – ₹5,000",
-            "Above ₹5,000"
-          ]
-        }
-      ]
-    },
-    {
-      "category": "Product Experience",
-      "questions": [
-        {
-          "q": "How easy should package uploading be?",
-          "type": "dropdown",
-          "options": [
-            "Extremely easy (bulk upload/excel)",
-            "Standard step-by-step form",
-            "API integration with existing system"
-          ]
-        },
-        {
-          "q": "Would you prefer direct bookings, inquiries, or both?",
-          "type": "dropdown",
-          "options": [
-            "Direct bookings only",
-            "Inquiries only",
-            "Both bookings & inquiries"
-          ]
-        },
-        {
-          "q": "What would stop you from using such a platform?",
-          "type": "dropdown",
-          "options": [
-            "High commissions",
-            "Complex onboarding / setup",
-            "Lack of customer traffic",
-            "Lack of control over pricing"
-          ]
-        },
-        {
-          "q": "Would you join as an early beta partner?",
-          "type": "radio",
-          "options": [
-            "Yes",
-            "Maybe",
-            "No"
-          ]
-        },
-        {
-          "q": "Would you recommend such a platform to others?",
-          "type": "rating",
-          "options": []
-        },
-        {
-          "q": "Current apps you are using",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "Feedbacks on current apps",
-          "type": "text",
-          "options": []
-        },
-        {
-          "q": "Current source of lead generation",
-          "type": "text",
-          "options": []
-        }
-      ]
-    }
-  ]
-};
-
-    // In-memory labels mapping for survey selection cards
-    const SURVEY_META = {
-      cafe: {
-        title: "Cafes & Restaurants",
-        desc: "For food business owners, cafes, and eateries operating in tourist-heavy zones.",
-        icon: "☕"
-      },
-      tour: {
-        title: "Tour Providers",
-        desc: "For local tour operators, adventure guides, and activity organizers.",
-        icon: "🧭"
-      },
-      tourist: {
-        title: "Travelers & Tourists",
-        desc: "For individuals who travel within India and explore regional destinations.",
-        icon: "🎒"
-      },
-      travel: {
-        title: "Travel Agencies",
-        desc: "For travel agents, trip planners, and B2B holiday package creators.",
-        icon: "✈️"
-      }
-    };
-
-    // ── 2. STATE ─────────────────────────────────────────────────────
-    let state = {
-      currentSurvey: null,        // 'cafe' | 'tour' | 'tourist' | 'travel'
-      currentSectionIndex: 0,
-      answers: {},                // maps question index (or identifier) to response value
-      isSubmitted: false
-    };
-
-    // ── 3. ROUTER ────────────────────────────────────────────────────
-    function router() {
-      const hash = window.location.hash.substring(1);
-      
-      if (['cafe', 'tour', 'tourist', 'travel'].includes(hash)) {
-        state.currentSurvey = hash;
-        state.isSubmitted = false;
-        
-        // Restore answers from localStorage if any exist
-        state.answers = loadAnswers(hash) || {};
-        
-        // Get last saved section index from local storage to resume
-        const savedIndex = localStorage.getItem(`voyana_survey_${hash}_index`);
-        state.currentSectionIndex = savedIndex ? parseInt(savedIndex, 10) : 0;
-        
-        renderSurvey(hash);
-      } else {
-        state.currentSurvey = null;
-        state.isSubmitted = false;
-        state.currentSectionIndex = 0;
-        state.answers = {};
-        renderLanding();
-      }
-    }
-
-    // ── 4. RENDERING PAGES ───────────────────────────────────────────
-    
-    // Render the main landing page with cards linking to each survey
-    function renderLanding() {
-      const container = document.getElementById('app');
-      container.innerHTML = `
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Voyana Research Surveys</title>
+
+		<!-- Google Fonts -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+			rel="stylesheet" />
+
+		<style>
+			/* ── 1. CSS VARIABLES & RESET ────────────────────────────────────── */
+			:root {
+				/* Backgrounds */
+				--color-bg-primary: #f5f0e8; /* warm parchment */
+				--color-bg-secondary: #ede8dc; /* slightly deeper cream */
+				--color-bg-card: #faf7f2; /* near-white warm */
+				--color-warm-white: #fffdf8; /* warm white */
+
+				/* Greens — primary brand color */
+				--color-green-dark: #1f3b2f; /* deep forest green */
+				--color-green-mid: #2e5440; /* mid green */
+				--color-green-light: #4a7c60; /* lighter green */
+
+				/* Text */
+				--color-text-primary: #1a2e22; /* near-black green-tinted */
+				--color-text-secondary: #5c6b5e; /* muted green-grey */
+				--color-text-muted: #9aa89c; /* soft grey-green */
+
+				/* Warm Accents */
+				--color-sand: #c8b89a; /* warm sand */
+				--color-sand-light: #e0d5c4; /* light sand */
+				--color-error: #a34839; /* warm brick red for validation errors */
+				--color-error-bg: #faf3f2;
+
+				/* Interactive */
+				--color-cta-bg: #1f3b2f;
+				--color-cta-text: #f5f0e8;
+				--color-cta-hover: #2e5440;
+				--color-active: #4a7c60;
+				--color-progress: #2e5440;
+				--color-focus-ring: rgba(46, 84, 64, 0.25);
+
+				/* Shadows */
+				--shadow-card: 0 4px 20px rgba(31, 59, 47, 0.05);
+				--shadow-hover: 0 12px 32px rgba(31, 59, 47, 0.1);
+
+				/* Fonts */
+				--font-display: 'Cormorant Garamond', Georgia, serif;
+				--font-body: 'DM Sans', sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background: linear-gradient(160deg, #f5f0e8 0%, #ede5d4 100%);
+				font-family: var(--font-body);
+				color: var(--color-text-primary);
+				min-height: 100vh;
+				line-height: 1.6;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			/* ── 2. LAYOUT & CONTAINER STRUCTURE ──────────────────────────────── */
+			#app {
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+			}
+
+			.landing-container {
+				max-width: 1100px;
+				width: 100%;
+				padding: 60px 24px;
+				text-align: center;
+				margin: 0 auto;
+			}
+
+			.survey-wrapper {
+				width: 100%;
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 40px 24px;
+				min-height: 100vh;
+				display: flex;
+				flex-direction: column;
+			}
+
+			/* ── 3. LANDING SCREEN ────────────────────────────────────────────── */
+			.landing-header {
+				margin-bottom: 60px;
+			}
+
+			.landing-logo {
+				font-family: var(--font-display);
+				font-size: 2.2rem;
+				font-style: italic;
+				font-weight: 600;
+				color: var(--color-green-dark);
+				margin-bottom: 16px;
+				letter-spacing: -0.01em;
+			}
+
+			.landing-title {
+				font-family: var(--font-display);
+				font-size: clamp(2.5rem, 5vw, 4rem);
+				font-weight: 500;
+				line-height: 1.1;
+				color: var(--color-green-dark);
+				margin-bottom: 24px;
+			}
+
+			.landing-subtitle {
+				font-size: clamp(1rem, 2vw, 1.2rem);
+				color: var(--color-text-secondary);
+				max-width: 600px;
+				margin: 0 auto;
+				font-weight: 300;
+			}
+
+			.grid-cards {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 24px;
+				margin-top: 40px;
+			}
+
+			.card-link {
+				text-decoration: none;
+				color: inherit;
+			}
+
+			.survey-card {
+				background: var(--color-bg-card);
+				border: 1px solid var(--color-sand-light);
+				border-radius: 16px;
+				padding: 40px 30px;
+				text-align: left;
+				box-shadow: var(--shadow-card);
+				transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				cursor: pointer;
+			}
+
+			.survey-card:hover {
+				transform: translateY(-8px);
+				box-shadow: var(--shadow-hover);
+				border-color: var(--color-sand);
+			}
+
+			.card-icon {
+				width: 48px;
+				height: 48px;
+				border-radius: 50%;
+				background: var(--color-bg-secondary);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--color-green-dark);
+				margin-bottom: 24px;
+				font-size: 1.4rem;
+				transition: background 300ms ease;
+			}
+
+			.survey-card:hover .card-icon {
+				background: var(--color-green-dark);
+				color: var(--color-cta-text);
+			}
+
+			.card-title {
+				font-family: var(--font-display);
+				font-size: 1.8rem;
+				font-style: italic;
+				font-weight: 500;
+				color: var(--color-green-dark);
+				margin-bottom: 12px;
+			}
+
+			.card-desc {
+				font-size: 0.95rem;
+				color: var(--color-text-secondary);
+				font-weight: 300;
+				line-height: 1.5;
+				margin-bottom: 30px;
+				flex-grow: 1;
+			}
+
+			.card-action {
+				display: inline-flex;
+				align-items: center;
+				font-weight: 500;
+				font-size: 0.9rem;
+				color: var(--color-green-dark);
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				gap: 8px;
+			}
+
+			.card-action svg {
+				transition: transform 300ms ease;
+			}
+
+			.survey-card:hover .card-action svg {
+				transform: translateX(6px);
+			}
+
+			/* ── 4. SURVEY CONTAINER & HEADER ─────────────────────────────────── */
+			.survey-header {
+				margin-bottom: 32px;
+				width: 100%;
+			}
+
+			.brand-bar {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 24px;
+				width: 100%;
+			}
+
+			.logo-link {
+				font-family: var(--font-display);
+				font-size: 1.6rem;
+				font-style: italic;
+				font-weight: 600;
+				color: var(--color-green-dark);
+				text-decoration: none;
+			}
+
+			.survey-name {
+				font-size: 0.9rem;
+				font-weight: 500;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: var(--color-text-secondary);
+				background: var(--color-bg-secondary);
+				padding: 6px 14px;
+				border-radius: 100px;
+			}
+
+			.category-stepper {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				margin-bottom: 10px;
+				flex-wrap: wrap;
+				gap: 8px;
+			}
+
+			.section-title {
+				font-family: var(--font-display);
+				font-style: italic;
+				font-weight: 500;
+				font-size: clamp(1.8rem, 4vw, 2.4rem);
+				color: var(--color-green-dark);
+				line-height: 1.2;
+			}
+
+			.step-indicator {
+				font-size: 0.85rem;
+				font-weight: 600;
+				color: var(--color-text-secondary);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+			}
+
+			/* ── 5. PROGRESS BAR ──────────────────────────────────────────────── */
+			.progress-track {
+				background: var(--color-sand-light);
+				border-radius: 100px;
+				height: 6px;
+				width: 100%;
+				overflow: hidden;
+				margin-bottom: 40px;
+			}
+
+			.progress-fill {
+				background: linear-gradient(
+					90deg,
+					var(--color-green-dark),
+					var(--color-green-light)
+				);
+				border-radius: 100px;
+				height: 100%;
+				width: 0%;
+				transition: width 400ms ease;
+			}
+
+			/* ── 6. QUESTION CARD & CONTAINER ─────────────────────────────────── */
+			.questions-container {
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+				width: 100%;
+			}
+
+			.question-card {
+				background: var(--color-bg-card);
+				border: 1px solid var(--color-sand-light);
+				border-radius: 16px;
+				padding: 30px;
+				box-shadow: var(--shadow-card);
+				width: 100%;
+				transition:
+					border-color 300ms,
+					background-color 300ms;
+				opacity: 0;
+				transform: translateY(16px);
+				animation: cardEnter 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+			}
+
+			@keyframes cardEnter {
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			.question-card.error {
+				border-color: var(--color-error);
+				background-color: var(--color-error-bg);
+			}
+
+			.question-text {
+				font-size: clamp(1rem, 2vw, 1.1rem);
+				font-weight: 500;
+				color: var(--color-text-primary);
+				margin-bottom: 20px;
+				display: block;
+			}
+
+			.question-text .required-star {
+				color: var(--color-error);
+				margin-left: 4px;
+			}
+
+			.error-message {
+				color: var(--color-error);
+				font-size: 0.85rem;
+				margin-top: 10px;
+				display: none;
+				align-items: center;
+				gap: 6px;
+				font-weight: 500;
+			}
+
+			.question-card.error .error-message {
+				display: flex;
+			}
+
+			/* ── 7. INPUT COMPONENTS ─────────────────────────────────────────── */
+
+			/* Text inputs & Textarea */
+			input[type='text'],
+			textarea {
+				width: 100%;
+				background: var(--color-warm-white);
+				border: 1.5px solid var(--color-sand-light);
+				color: var(--color-text-primary);
+				border-radius: 8px;
+				padding: 14px 16px;
+				font-family: var(--font-body);
+				font-size: 0.95rem;
+				transition:
+					border-color 200ms,
+					box-shadow 200ms;
+			}
+
+			input[type='text']:focus,
+			textarea:focus {
+				border-color: var(--color-green-light);
+				box-shadow: 0 0 0 3.5px var(--color-focus-ring);
+				outline: none;
+			}
+
+			textarea {
+				min-height: 120px;
+				resize: vertical;
+			}
+
+			/* Dropdown / Select */
+			.select-wrapper {
+				position: relative;
+				width: 100%;
+			}
+
+			select {
+				width: 100%;
+				background: var(--color-warm-white);
+				border: 1.5px solid var(--color-sand-light);
+				color: var(--color-text-primary);
+				border-radius: 8px;
+				padding: 14px 16px;
+				font-family: var(--font-body);
+				font-size: 0.95rem;
+				cursor: pointer;
+				appearance: none;
+				-webkit-appearance: none;
+				transition:
+					border-color 200ms,
+					box-shadow 200ms;
+			}
+
+			select:focus {
+				border-color: var(--color-green-light);
+				box-shadow: 0 0 0 3.5px var(--color-focus-ring);
+				outline: none;
+			}
+
+			.select-wrapper::after {
+				content: '';
+				position: absolute;
+				right: 18px;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 10px;
+				height: 6px;
+				background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%231A2E22' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+				background-repeat: no-repeat;
+				pointer-events: none;
+			}
+
+			/* Option Pills (Radio & Checkbox Group) */
+			.pills-group {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.option-pill {
+				background: var(--color-warm-white);
+				border: 1.5px solid var(--color-sand-light);
+				border-radius: 8px;
+				color: var(--color-text-primary);
+				cursor: pointer;
+				padding: 14px 18px;
+				font-size: 0.95rem;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				position: relative;
+				transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+				user-select: none;
+			}
+
+			.option-pill:hover {
+				border-color: var(--color-green-light);
+				background: var(--color-bg-card);
+				transform: scale(1.005);
+			}
+
+			.option-pill:focus-visible {
+				outline: none;
+				border-color: var(--color-green-light);
+				box-shadow: 0 0 0 3.5px var(--color-focus-ring);
+			}
+
+			.pill-indicator {
+				width: 18px;
+				height: 18px;
+				border: 2px solid var(--color-sand);
+				transition: all 200ms ease;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+			}
+
+			/* Radio indicator shape */
+			.type-radio .pill-indicator {
+				border-radius: 50%;
+			}
+
+			/* Checkbox indicator shape */
+			.type-checkbox .pill-indicator {
+				border-radius: 4px;
+			}
+
+			.option-pill.selected {
+				background: var(--color-bg-secondary);
+				border-color: var(--color-green-dark);
+				font-weight: 500;
+			}
+
+			.option-pill.selected .pill-indicator {
+				border-color: var(--color-green-dark);
+				background: var(--color-green-dark);
+			}
+
+			.option-pill.selected .pill-indicator::after {
+				content: '';
+				display: block;
+			}
+
+			/* Dot for radio */
+			.type-radio .option-pill.selected .pill-indicator::after {
+				width: 6px;
+				height: 6px;
+				background: var(--color-cta-text);
+				border-radius: 50%;
+			}
+
+			/* Checkmark for checkbox */
+			.type-checkbox .option-pill.selected .pill-indicator::after {
+				width: 8px;
+				height: 5px;
+				border-left: 2px solid var(--color-cta-text);
+				border-bottom: 2px solid var(--color-cta-text);
+				transform: rotate(-45deg) translate(1px, -1px);
+			}
+
+			/* Star rating */
+			.star-rating-container {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+			}
+
+			.star-row {
+				display: inline-flex;
+				gap: 8px;
+			}
+
+			.star {
+				font-size: 2.2rem;
+				color: var(--color-sand-light);
+				cursor: pointer;
+				transition:
+					transform 150ms ease,
+					color 150ms ease;
+				user-select: none;
+			}
+
+			.star:hover {
+				transform: scale(1.15);
+			}
+
+			.star.hovered,
+			.star.filled {
+				color: var(--color-green-mid);
+			}
+
+			.star:focus-visible {
+				outline: none;
+				transform: scale(1.1);
+			}
+
+			.rating-label {
+				font-size: 0.9rem;
+				font-weight: 500;
+				color: var(--color-text-secondary);
+				min-width: 80px;
+			}
+
+			/* ── 8. BUTTONS & NAVIGATION FOOTER ───────────────────────────────── */
+			.navigation-footer {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-top: 40px;
+				width: 100%;
+				gap: 16px;
+			}
+
+			.btn {
+				font-family: var(--font-body);
+				font-weight: 500;
+				font-size: 0.95rem;
+				letter-spacing: 0.02em;
+				cursor: pointer;
+				transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				min-height: 48px;
+				padding: 12px 28px;
+				border-radius: 100px;
+				user-select: none;
+			}
+
+			.btn:focus-visible {
+				outline: none;
+				box-shadow: 0 0 0 3.5px var(--color-focus-ring);
+			}
+
+			.btn-primary {
+				background: var(--color-cta-bg);
+				color: var(--color-cta-text);
+				border: none;
+				box-shadow: 0 2px 8px rgba(31, 59, 47, 0.15);
+			}
+
+			.btn-primary:hover {
+				background: var(--color-cta-hover);
+				box-shadow: 0 4px 16px rgba(31, 59, 47, 0.25);
+			}
+
+			.btn-primary:active {
+				transform: scale(0.97);
+			}
+
+			.btn-secondary {
+				background: transparent;
+				color: var(--color-green-dark);
+				border: 1.5px solid var(--color-green-dark);
+			}
+
+			.btn-secondary:hover {
+				background: var(--color-bg-secondary);
+			}
+
+			.btn-secondary:active {
+				transform: scale(0.97);
+			}
+
+			.btn-back-home {
+				background: transparent;
+				color: var(--color-text-secondary);
+				border: 1.5px solid var(--color-sand);
+			}
+
+			.btn-back-home:hover {
+				background: var(--color-bg-secondary);
+				border-color: var(--color-text-secondary);
+			}
+
+			/* ── 9. THANK-YOU SCREEN ─────────────────────────────────────────── */
+			.thankyou-card {
+				background: var(--color-bg-card);
+				border: 1px solid var(--color-sand-light);
+				border-radius: 24px;
+				padding: 60px 40px;
+				text-align: center;
+				box-shadow: var(--shadow-card);
+				max-width: 600px;
+				width: 100%;
+				opacity: 0;
+				transform: scale(0.96);
+				animation: thankyouEnter 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+			}
+
+			@keyframes thankyouEnter {
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+
+			.success-icon-wrapper {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				background: var(--color-bg-secondary);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--color-green-dark);
+				margin: 0 auto 32px;
+				font-size: 2.2rem;
+			}
+
+			.thankyou-title {
+				font-family: var(--font-display);
+				font-style: italic;
+				font-weight: 500;
+				font-size: 2.6rem;
+				color: var(--color-green-dark);
+				margin-bottom: 16px;
+			}
+
+			.thankyou-text {
+				color: var(--color-text-secondary);
+				font-size: 1.05rem;
+				margin-bottom: 40px;
+				font-weight: 300;
+				line-height: 1.6;
+			}
+
+			/* ── 10. RESPONSIVE BREAKPOINTS & ADAPTIVE LAYOUT ────────────────── */
+
+			/* Small mobiles */
+			@media (max-width: 640px) {
+				.survey-wrapper {
+					padding: 24px 16px;
+				}
+				.question-card {
+					padding: 20px;
+				}
+				.btn {
+					flex-grow: 1;
+					font-size: 0.9rem;
+				}
+				.navigation-footer {
+					flex-direction: column-reverse;
+				}
+				.navigation-footer .btn {
+					width: 100%;
+				}
+			}
+
+			/* Tablet and Small Desktop default layout (Centered single column) */
+			@media (min-width: 641px) and (max-width: 1440px) {
+				.survey-wrapper {
+					max-width: 680px;
+				}
+			}
+
+			/* Wide Desktop: Two-column layout */
+			@media (min-width: 1441px) {
+				#app {
+					flex-direction: row;
+					align-items: stretch;
+				}
+
+				.survey-wrapper {
+					display: grid;
+					grid-template-columns: 380px 1fr;
+					max-width: 100%;
+					width: 100%;
+					padding: 0;
+					min-height: 100vh;
+				}
+
+				.survey-sidebar {
+					background-color: var(--color-bg-secondary);
+					border-right: 1px solid var(--color-sand);
+					padding: 60px 48px;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					position: sticky;
+					top: 0;
+					height: 100vh;
+				}
+
+				.survey-main {
+					background-color: var(--color-bg-primary);
+					padding: 60px 80px;
+					overflow-y: auto;
+					display: flex;
+					flex-direction: column;
+					justify-content: flex-start;
+					align-items: center;
+					min-height: 100vh;
+				}
+
+				.questions-container,
+				.navigation-footer {
+					max-width: 720px;
+					width: 100%;
+				}
+
+				/* Hide duplicate header elements and adjust positions */
+				.survey-header {
+					margin-bottom: 0;
+				}
+
+				.brand-bar {
+					margin-bottom: 40px;
+				}
+
+				.progress-track {
+					margin-bottom: 0;
+				}
+
+				.survey-sidebar-inner {
+					display: flex;
+					flex-direction: column;
+					gap: 30px;
+				}
+			}
+
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app"></div>
+
+		<script>
+			// ── 1. SURVEY DATA ──────────────────────────────────────────────
+			// Embedded pre-parsed JavaScript objects
+			const SURVEYS = {
+				cafe: [
+					{
+						category: 'Business Profile',
+						questions: [
+							{
+								q: 'Pls share your restraunt / café name, location, social media handle e.g. instagram, website etc.',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: 'How would you classify your establishment?',
+								type: 'dropdown',
+								options: [
+									'Fine dining restaurant',
+									'Casual dining restaurant',
+									'Cafe / coffee shop',
+									'Dhaba / local eatery',
+									'Street food stall / cart',
+									'Rooftop restaurant',
+									'Heritage / themed restaurant',
+									'Bar & restaurant',
+									'Bakery & cafe',
+									'Cloud kitchen / delivery only',
+									'Multi-cuisine buffet',
+									'Specialty cuisine restaurant',
+								],
+							},
+							{
+								q: 'How long have you been operating?',
+								type: 'dropdown',
+								options: [
+									'Less than 1 year',
+									'1–2 years',
+									'3–5 years',
+									'6–10 years',
+									'More than 10 years',
+								],
+							},
+							{
+								q: 'What is your average monthly revenue?',
+								type: 'dropdown',
+								options: [
+									'Below ₹1 lakh',
+									'₹1L – ₹3L',
+									'₹3L – ₹7L',
+									'₹7L – ₹15L',
+									'₹15L – ₹30L',
+									'Above ₹30L',
+									'Prefer not to say',
+								],
+							},
+							{
+								q: 'What percentage of your customers are tourists vs locals?',
+								type: 'dropdown',
+								options: [
+									'90%+ tourists',
+									'70–90% tourists',
+									'50–70% tourists',
+									'30–50% tourists',
+									'10–30% tourists',
+									'Less than 10% tourists',
+								],
+							},
+						],
+					},
+					{
+						category: 'Customer Attraction & Discovery',
+						questions: [
+							{
+								q: 'How do tourists currently find your restaurant?',
+								type: 'dropdown',
+								options: [
+									'Walking past and seeing the signboard',
+									'Google Maps / Google Search',
+									'Zomato listing',
+									'Swiggy listing',
+									'TripAdvisor',
+									'Instagram / Facebook',
+									'Their hotel / homestay recommended us',
+									'A travel guide or travel blog',
+									'Tour operator or local guide brought them',
+									'Word of mouth from other tourists',
+									'Recommendation from a taxi / auto driver',
+									'Travel app (Thrillophilia, MakeMyTrip, etc.)',
+								],
+							},
+							{
+								q: 'Do you actively promote your restaurant to tourists?',
+								type: 'dropdown',
+								options: [
+									"Yes, very actively — it's a top priority",
+									'Yes, somewhat — we do basic things',
+									'We rely on organic discovery, no active promotion',
+									'No, we focus only on local regulars',
+								],
+							},
+							{
+								q: 'What promotional activities do you currently do to attract tourists?',
+								type: 'dropdown',
+								options: [
+									'Maintain Google My Business listing',
+									'Post regularly on Instagram / Facebook',
+									'Run paid ads on social media',
+									'List on Zomato / Swiggy',
+									'List on TripAdvisor',
+									'Partner with nearby hotels / homestays',
+									'Pay local guides or taxi drivers for referrals',
+									'Put up banners or boards near tourist areas',
+									'Offer tourist-specific combo menus or discounts',
+									'Use a travel or tourism app',
+									'Do nothing specific — tourists find us organically',
+									'Participate in local food festivals or events',
+								],
+							},
+						],
+					},
+					{
+						category: 'Current App & Digital Presence',
+						questions: [
+							{
+								q: 'Are you currently listed on any food delivery or discovery apps?',
+								type: 'dropdown',
+								options: [
+									'Zomato (delivery)',
+									'Zomato (dine-in discovery)',
+									'Swiggy (delivery)',
+									'Swiggy Dineout',
+									'TripAdvisor',
+									'Google My Business',
+									'MagicPin',
+									'Dineout',
+									'EazyDiner',
+									'No, I am not listed on any app',
+									'A local/regional travel or food app',
+								],
+							},
+							{
+								q: 'If you use Zomato / Swiggy, what percentage of your total revenue comes from these platforms?',
+								type: 'dropdown',
+								options: [
+									'0% (not using them)',
+									'Less than 10%',
+									'10–25%',
+									'25–40%',
+									'40–60%',
+									'More than 60%',
+								],
+							},
+							{
+								q: 'What is the commission you currently pay to food delivery / listing apps?',
+								type: 'dropdown',
+								options: [
+									"I don't know the exact figure",
+									'Less than 15%',
+									'15–20%',
+									'20–25%',
+									'25–30%',
+									'More than 30%',
+									"I don't use any such platforms",
+								],
+							},
+							{
+								q: 'Do you feel the commission charged by current platforms is fair?',
+								type: 'rating',
+								options: [
+									'1 – Very unfair, it hurts my margins seriously',
+									'2 – Unfair but I have no choice',
+									'3 – Neutral / acceptable',
+									'4 – Fair considering the volume they bring',
+									'5 – Very fair, worth every rupee',
+								],
+							},
+							{
+								q: 'What is the biggest problem with platforms like Zomato / Swiggy for your business?',
+								type: 'dropdown',
+								options: [
+									'Commission is too high',
+									'Customers only see price, not our quality or story',
+									'Too many competitors listed together',
+									'Platform controls discounting and we are forced to offer deals',
+									'No direct relationship with the customer',
+									'Ratings and reviews are hard to manage',
+									'Payment settlement is slow',
+									'Customer data is not shared with us',
+									'Platform changes rules without notice',
+									'High cost of onboarding / subscription',
+									'We depend too much on them for visibility',
+								],
+							},
+							{
+								q: 'If a travel / tourism app approached you to list your restaurant for tourist discovery, would you consider it?',
+								type: 'dropdown',
+								options: [
+									'Yes, absolutely — would join immediately',
+									'Yes, if the commission is reasonable',
+									'Maybe — depends on the platform and reach',
+									'Probably not — I already have enough business',
+									'No — not interested',
+								],
+							},
+							{
+								q: 'What would make you trust and join a new travel / tourism app?',
+								type: 'dropdown',
+								options: [
+									'Proof of tourist user base in my area',
+									'Low or zero commission model',
+									'My own dashboard to manage bookings and reviews',
+									'Direct customer data access',
+									'Free trial period',
+									'Endorsement from tourism board or government',
+									'Other restaurant owners in my area already using it',
+									'Strong customer support team',
+									'Transparent payment and settlement process',
+									'Integration with Google Maps / existing platforms',
+								],
+							},
+						],
+					},
+					{
+						category: 'Revenue, Margins & Pricing',
+						questions: [
+							{
+								q: 'What is the maximum commission / fee you would be comfortable paying a travel app for a tourist customer referral?',
+								type: 'dropdown',
+								options: [
+									'0% — I want a flat monthly subscription instead',
+									'Up to 5%',
+									'5–10%',
+									'10–15%',
+									'15–20%',
+									'More than 20% if volume is high enough',
+								],
+							},
+						],
+					},
+					{
+						category: 'Tourist Customer Experience',
+						questions: [
+							{
+								q: 'What do tourist customers complain about most at your restaurant?',
+								type: 'dropdown',
+								options: [
+									'Prices being too high',
+									'Slow service',
+									'Language barrier',
+									'Food not matching what was shown online / on menu',
+									'Hygiene concerns',
+									'Not knowing what to order — no local food guidance',
+									'Menu not having prices displayed clearly',
+									'Difficulty in making payment (no card / UPI accepted)',
+									'Waitlist / no reservation system',
+									'Not enough vegetarian or dietary-specific options',
+									'Nothing major — tourists are generally satisfied',
+								],
+							},
+							{
+								q: 'What do tourist customers appreciate most about your restaurant?',
+								type: 'dropdown',
+								options: [
+									'Authentic local cuisine',
+									'Good value for money',
+									'Friendly and helpful staff',
+									'Scenic or unique ambience',
+									'Fast service',
+									'Variety of options on menu',
+									'Hygienic and clean environment',
+									'Good reviews on Google / Zomato',
+									'Local food expertise — staff recommends well',
+									'Convenient location near tourist spots',
+									"Unique experience they can't find elsewhere",
+								],
+							},
+							{
+								q: 'Do you face problems with tourists making reservations and then not showing up (no-shows)?',
+								type: 'dropdown',
+								options: [
+									"Yes, it's a significant problem",
+									'Yes, it happens occasionally',
+									'Rarely',
+									"No, we don't take reservations",
+									'We mostly do walk-in only',
+								],
+							},
+							{
+								q: 'Do you get tourists who want to learn about the local cuisine or ingredients?',
+								type: 'dropdown',
+								options: [
+									'Yes, very frequently',
+									'Yes, sometimes',
+									'Occasionally',
+									'Rarely',
+									'Never',
+								],
+							},
+						],
+					},
+					{
+						category: 'Operational Challenges',
+						questions: [
+							{
+								q: 'What are your biggest operational challenges when serving tourist customers?',
+								type: 'dropdown',
+								options: [
+									'Managing sudden rush (unpredictable tourist footfall)',
+									'Language and communication barrier',
+									'Staff not trained for tourist-facing service',
+									'Managing dietary restrictions and allergies',
+									'Keeping consistent food quality during rush hours',
+									'Managing online reviews — especially unfair ones',
+									'Lack of a reservation system causing chaos',
+									'Processing different payment methods (foreign cards, UPI)',
+									'Managing tourists who haggle over prices',
+									'Not enough staff during peak tourist season',
+									'Kitchen capacity constraints during high season',
+								],
+							},
+							{
+								q: 'Do you face difficulty managing online reviews left by tourists?',
+								type: 'dropdown',
+								options: [
+									'Yes, fake or unfair reviews are a serious problem',
+									"Yes, it's hard to respond to and manage reviews",
+									'Somewhat — occasional negative reviews',
+									'No, our ratings are generally positive',
+									"We don't actively monitor reviews",
+								],
+							},
+						],
+					},
+					{
+						category: 'Marketing & Visibility Needs',
+						questions: [
+							{
+								q: 'What type of marketing support would most benefit your restaurant?',
+								type: 'dropdown',
+								options: [
+									'Being featured in travel apps used by tourists',
+									'Being included in hotel / homestay recommendation lists',
+									'Being featured in curated travel itineraries',
+									'Social media content creation support',
+									'Professional food photography',
+									'Getting more Google reviews from verified visitors',
+									'Email marketing to tourists who visited the area',
+									'Appearing in food sections of travel blogs',
+									'SMS or WhatsApp campaigns to tourists in my area',
+									'Collaborating with travel influencers or food bloggers',
+									'Government tourism board listings',
+								],
+							},
+							{
+								q: 'Have you ever collaborated with a hotel, homestay, or tour operator to bring in customers?',
+								type: 'dropdown',
+								options: [
+									'Yes, formally — we have an agreement in place',
+									'Yes, informally — referrals happen but no formal deal',
+									"We have tried but it didn't work out",
+									"No, but we'd be very interested",
+									"No, and we haven't considered it",
+								],
+							},
+							{
+								q: "Would you pay to be a 'featured' or 'sponsored' restaurant on a travel discovery app?",
+								type: 'dropdown',
+								options: [
+									'Yes, if the tourist user base is proven and large',
+									'Yes, if cost per customer acquired is lower than Zomato',
+									'Maybe — need more information',
+									'No — I rely on organic discovery',
+									"No — paid listings haven't worked for me in the past",
+								],
+							},
+							{
+								q: 'How important is it for you to collect tourist customer data (email, phone, city of origin)?',
+								type: 'rating',
+								options: [
+									'1 – Not important',
+									'2',
+									'3 – Somewhat useful for understanding our customer base',
+									'4',
+									'5 – Very important, I want to build a tourist customer database',
+								],
+							},
+							{
+								q: 'Would access to tourist demand data for your area (peak travel months, popular tourist profiles) help you plan better?',
+								type: 'rating',
+								options: [
+									'1 – Not useful',
+									'2',
+									'3 – Somewhat useful',
+									'4',
+									"5 – Very useful, I'd use this to plan staffing, menu, and marketing",
+								],
+							},
+						],
+					},
+					{
+						category: 'Future Plans & Expansion',
+						questions: [
+							{
+								q: "What is the single biggest obstacle to growing your restaurant's tourist business?",
+								type: 'dropdown',
+								options: [
+									"Low visibility — tourists don't know we exist",
+									'High commissions on existing platforms',
+									'Inconsistent tourist footfall — too seasonal',
+									'Not enough staff or operational capacity',
+									'Difficulty building trust with tourists who are first-time visitors',
+									'Competition from larger / more well-known restaurants',
+									'Lack of marketing knowledge or budget',
+									'Language and communication barriers',
+									'No reservation system to manage demand',
+									'Government or licensing issues',
+								],
+							},
+							{
+								q: 'If a travel app could solve one specific problem for your restaurant, what would you want it to solve?',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: 'Would you be interested in a restaurant-focused dashboard that shows you tourist trends, peak times, and customer preferences in your area?',
+								type: 'rating',
+								options: [
+									'1 – Not interested',
+									'2',
+									'3 – Somewhat interested',
+									'4',
+									'5 – Very interested, I would pay for this',
+								],
+							},
+							{
+								q: 'How likely are you to recommend a travel app to fellow restaurant owners if it genuinely helped your tourist business?',
+								type: 'rating',
+								options: [
+									'1 – Very unlikely',
+									'2',
+									'3 – Might mention it',
+									'4',
+									'5 – Would actively recommend to every restaurant owner I know',
+								],
+							},
+						],
+					},
+					{
+						category: 'App Feature Wishlist',
+						questions: [
+							{
+								q: 'Which of the following features would be most valuable to you in a travel app?',
+								type: 'dropdown',
+								options: [
+									'Tourist discovery listing (appear in traveller searches)',
+									'Table reservation / pre-booking from tourists',
+									'Tourist demand analytics for my area',
+									'Featured placement in travel itineraries',
+									'Integration with Google Maps',
+									'Verified review system from actual visitors',
+									'Ability to respond to reviews publicly',
+									'Tourist-facing menu with photos and dietary labels',
+									'In-app promotional offers / deals management',
+									'Customer contact data access',
+									'Group booking management',
+									'Revenue dashboard and booking reports',
+									'QR code menu for tourists',
+									'Multilingual menu display (English, Hindi, regional languages)',
+									'Low / zero commission model',
+									'Flat monthly subscription option',
+								],
+							},
+							{
+								q: 'Would you benefit from a feature that lets tourists pre-order from your menu before arriving?',
+								type: 'dropdown',
+								options: [
+									'Yes, it would reduce wait times and improve experience',
+									'Yes for large groups especially',
+									'Maybe — depends on kitchen workflow',
+									'No — we prefer fresh orders on arrival',
+									'No — too complex to implement',
+								],
+							},
+							{
+								q: 'Would a loyalty or rewards feature for repeat tourist visitors be useful for your restaurant?',
+								type: 'dropdown',
+								options: [
+									'Yes, tourists do revisit — this would help retention',
+									'Yes, interesting idea worth exploring',
+									'Unlikely — tourists usually visit once',
+									'No — repeat visits are not our primary goal',
+								],
+							},
+							{
+								q: 'What is the maximum monthly fee you would pay for a comprehensive travel app subscription for restaurants?',
+								type: 'dropdown',
+								options: [
+									'₹0 — commission only model preferred',
+									'₹500 – ₹1,000 per month',
+									'₹1,000 – ₹2,500 per month',
+									'₹2,500 – ₹5,000 per month',
+									'Above ₹5,000 if value is proven',
+									'Depends entirely on number of tourist customers it brings',
+								],
+							},
+						],
+					},
+				],
+				tour: [
+					{
+						category: 'Business Profile',
+						questions: [
+							{
+								q: 'What type of services do you provide?',
+								type: 'dropdown',
+								options: [
+									'Tour Operator',
+									'Activity Provider',
+									'Transport Provider',
+									'Rental Service',
+									'Other',
+								],
+							},
+							{
+								q: 'How do customers currently discover your services?',
+								type: 'dropdown',
+								options: [
+									'Word of mouth',
+									'Social media (Instagram/FB)',
+									'Google Search/Maps',
+									'Local guides/Referrals',
+									'Other platforms',
+								],
+							},
+						],
+					},
+					{
+						category: 'Challenges',
+						questions: [
+							{
+								q: 'What is your biggest business challenge?',
+								type: 'dropdown',
+								options: [
+									'Finding new customers',
+									'High marketing/advertising costs',
+									'Seasonal demand fluctuations',
+									'Managing bookings & scheduling',
+									'Competition from big platforms',
+								],
+							},
+						],
+					},
+					{
+						category: 'App Validation',
+						questions: [
+							{
+								q: 'Would you list your services on a tourism comparison platform?',
+								type: 'rating',
+								options: [],
+							},
+							{
+								q: 'What would encourage you to join such a platform?',
+								type: 'dropdown',
+								options: [
+									'More direct booking volume',
+									'Lower booking commissions',
+									'Better brand visibility',
+									'Easy digital management tools',
+									'Access to tourist travel data',
+								],
+							},
+							{
+								q: 'What tools would help your business most?',
+								type: 'dropdown',
+								options: [
+									'Online booking & payment system',
+									'Customer reviews manager',
+									'AI pricing recommendations',
+									'Real-time demand analytics dashboard',
+									'SMS/WhatsApp reminders for bookings',
+								],
+							},
+							{
+								q: 'Would you like customers to compare your services with competitors?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+						],
+					},
+					{
+						category: 'Revenue Validation',
+						questions: [
+							{
+								q: 'Would you pay for premium visibility or featured listings?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+							{
+								q: 'What concerns would you have before joining?',
+								type: 'dropdown',
+								options: [
+									'High setup or monthly costs',
+									'Technical difficulty of using the app',
+									'Customer data privacy',
+									'Whether tourists will actually use it',
+									'Other',
+								],
+							},
+							{
+								q: 'What payment model do you prefer?',
+								type: 'dropdown',
+								options: [
+									'Flat monthly subscription',
+									'Commission per booking',
+									'Hybrid (low subscription + low commission)',
+									'Pay-per-lead / Pay-per-click',
+								],
+							},
+							{
+								q: 'Would analytics about customer trends & demand help your business?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+							{
+								q: 'Would AI-based pricing recommendations help you?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+						],
+					},
+					{
+						category: 'Product Experience',
+						questions: [
+							{
+								q: 'Would you join as an early launch partner?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+						],
+					},
+					{
+						category: '',
+						questions: [
+							{
+								q: 'Existing tools or app',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: 'Feedback',
+								type: 'text',
+								options: [],
+							},
+						],
+					},
+				],
+				tourist: [
+					{
+						category: 'Traveller Profile',
+						questions: [
+							{
+								q: 'Lets start with you age first, you could tell us, pls:)',
+								type: 'dropdown',
+								options: ['Under 18', '18–24', '25–45', '45–54', '55+'],
+							},
+							{
+								q: 'How often do you travel within India per year?',
+								type: 'dropdown',
+								options: [
+									'This will be my first trip',
+									'Once a year',
+									'2–3 times a year',
+									'4–6 times a year',
+									'7 or more times a year',
+								],
+							},
+							{
+								q: 'What is your approximate annual household income?',
+								type: 'dropdown',
+								options: [
+									'Below ₹5 lakh',
+									'₹5L – ₹10L',
+									'₹10L – ₹20L',
+									'₹20L – ₹50L',
+									'Above ₹50L',
+									'Prefer not to say',
+								],
+							},
+						],
+					},
+					{
+						category: 'Destination Discovery',
+						questions: [
+							{
+								q: 'Which platform most influences your travel decisions?',
+								type: 'dropdown',
+								options: [
+									'Instagram',
+									'YouTube',
+									'Facebook',
+									'Twitter / X',
+									'Travel blogs',
+									'None — personal recommendations',
+									'Recommendations from friends or family',
+								],
+							},
+							{
+								q: "How important is 'Instagram-worthiness' when choosing a destination?",
+								type: 'rating',
+								options: [
+									'1 – Not important at all',
+									'2',
+									'3 – Somewhat important',
+									'4',
+									'5 – Very important',
+								],
+							},
+							{
+								q: 'How far in advance do you start researching a trip?',
+								type: 'dropdown',
+								options: [
+									'Same week I want to go',
+									'1–2 weeks before',
+									'About 1 month before',
+									'2–3 months before',
+									'3–6 months before',
+									'6+ months before',
+								],
+							},
+							{
+								q: "Have you ever regretted a trip because it wasn't what you expected online?",
+								type: 'dropdown',
+								options: [
+									'Yes, multiple times',
+									'Yes, once',
+									'No, expectations matched reality',
+									'No, I always research thoroughly',
+								],
+							},
+						],
+					},
+					{
+						category: 'Booking Behaviour',
+						questions: [
+							{
+								q: 'How do you currently book your trips?',
+								type: 'dropdown',
+								options: [
+									'Fully self-planned',
+									'Full package from an app/website',
+									'Through a traditional travel agent',
+									'Directly with a local operator via WhatsApp',
+									'Mix of self-planned + operator',
+									'Rely on friend/family to plan',
+								],
+							},
+							{
+								q: 'Which platforms have you used to book a trip in the past year?',
+								type: 'dropdown',
+								options: [
+									'MakeMyTrip',
+									'Goibibo',
+									'EaseMyTrip',
+									'Cleartrip',
+									'Yatra.com',
+									'Airbnb',
+									'Thomas Cook',
+									'Local/independent travel agent',
+									'Other',
+								],
+							},
+							{
+								q: 'How much time do you spend researching before confirming a booking?',
+								type: 'dropdown',
+								options: [
+									'Less than 1 hour',
+									'1–3 hours',
+									'3–6 hours',
+									'6–12 hours',
+									'More than 12 hours over multiple days',
+								],
+							},
+							{
+								q: 'What is your biggest frustration with how you currently book tours?',
+								type: 'dropdown',
+								options: [
+									'Hidden costs discovered late',
+									'Unreliable/unverified operators',
+									'No easy way to compare packages',
+									'Too many platforms to check',
+									'Unclear cancellation policies',
+									'Lack of authentic reviews',
+									'No customisation option',
+									'Hard to communicate with operators',
+									'No single platform for all packages',
+									'Slow or no customer support',
+								],
+							},
+							{
+								q: 'Do you prefer booking everything through one platform or separately?',
+								type: 'dropdown',
+								options: [
+									'Strongly prefer one platform',
+									'Prefer one but fine with separate',
+									'No strong preference',
+									'Prefer to research and book separately',
+									'Depends on the trip',
+								],
+							},
+						],
+					},
+					{
+						category: 'Budget & Pricing',
+						questions: [
+							{
+								q: 'How much do hidden charges bother you?',
+								type: 'rating',
+								options: [
+									"1 – Doesn't bother me",
+									'2',
+									'3 – Bothers me somewhat',
+									'4',
+									"5 – It's a dealbreaker",
+								],
+							},
+							{
+								q: 'Would you prefer all-inclusive price over low headline + add-ons?',
+								type: 'dropdown',
+								options: [
+									'Yes – one transparent total price',
+									'No – prefer low headline, pay for what I use',
+									'No preference',
+									'Depends on size of add-ons',
+								],
+							},
+							{
+								q: 'What refund policy is acceptable if you cancel 45 days before?',
+								type: 'dropdown',
+								options: [
+									'Full 100% refund',
+									'75–90% refund',
+									'50% refund',
+									'Any refund is acceptable',
+									'Non-refundable is ok if price was low',
+									'Depends on reason for cancellation',
+								],
+							},
+							{
+								q: 'Would group discounts influence you to travel with a larger group?',
+								type: 'dropdown',
+								options: [
+									'Yes, definitely',
+									'Probably yes',
+									'Maybe, depending on the discount',
+									"No, group size isn't influenced by pricing",
+								],
+							},
+						],
+					},
+					{
+						category: 'Trust & Tour Operators',
+						questions: [
+							{
+								q: 'Have you ever booked through a small/local tour operator?',
+								type: 'dropdown',
+								options: [
+									'Yes, multiple times – good experiences',
+									'Yes, multiple times – mixed results',
+									'Yes, once',
+									'No, but I would consider it',
+									"No – I don't trust small operators",
+									"No – I didn't know how to find them",
+								],
+							},
+							{
+								q: 'What signals make you trust a tour operator?',
+								type: 'dropdown',
+								options: [
+									'Positive reviews from verified travellers',
+									'Number of years in business',
+									'Government/official certification',
+									'Fast response to enquiries',
+									'Detailed and clear package description',
+									'Authentic-looking photos (not stock images)',
+									'Word of mouth from someone I know',
+									'Transparent refund/cancellation policy',
+									'Past booking count shown on profile',
+									'Physical address or office location visible',
+								],
+							},
+							{
+								q: 'How important are traveller reviews when selecting an operator?',
+								type: 'rating',
+								options: [
+									"1 – I don't rely on reviews",
+									'2',
+									'3 – Somewhat important',
+									'4',
+									'5 – Most important factor',
+								],
+							},
+							{
+								q: 'Have you had a bad experience with a tour operator? What went wrong?',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: "Would a 'verified by the platform' badge influence your decision?",
+								type: 'rating',
+								options: [
+									'1 – No influence',
+									'2',
+									'3 – Somewhat influential',
+									'4',
+									'5 – Very strong influence',
+								],
+							},
+						],
+					},
+					{
+						category: 'Food & Dietary Needs',
+						questions: [
+							{
+								q: 'How important is food quality and variety when choosing a package?',
+								type: 'rating',
+								options: [
+									"1 – Food doesn't factor in",
+									'2',
+									'3 – Somewhat important',
+									'4',
+									"5 – It's a major deciding factor",
+								],
+							},
+							{
+								q: 'Do you have any dietary preferences or restrictions?',
+								type: 'dropdown',
+								options: [
+									'Vegetarian',
+									'Jain (no root vegetables)',
+									'Vegan',
+									'Halal',
+									'Gluten-free',
+									'No onion / no garlic',
+									'Nut allergy or other food allergy',
+									'No restrictions – I eat everything',
+									'Other',
+								],
+							},
+							{
+								q: 'How clearly should a package describe meals?',
+								type: 'dropdown',
+								options: [
+									'Every meal listed with menu',
+									'Meal type listed (breakfast, dinner) without menu',
+									'Just mention if meals are included or not',
+									"I don't need meal details – I'll sort food myself",
+								],
+							},
+							{
+								q: 'Would you pay extra to ensure food catering to your dietary needs throughout?',
+								type: 'dropdown',
+								options: [
+									'Yes, definitely',
+									'Yes, if charge is reasonable',
+									'Only if no alternatives available',
+									"No – I'll manage on my own",
+								],
+							},
+							{
+								q: 'How important is trying local and regional cuisine during a trip?',
+								type: 'rating',
+								options: [
+									'1 – I prefer familiar food',
+									'2',
+									'3 – I enjoy both',
+									'4',
+									'5 – Trying local food is a trip highlight',
+								],
+							},
+							{
+								q: 'Would a filter to show operators who cater to specific diets be useful?',
+								type: 'dropdown',
+								options: [
+									'Very useful – I always need this',
+									'Useful sometimes',
+									'Nice to have but not essential',
+									'Not relevant to me',
+								],
+							},
+							{
+								q: 'Would you be interested in a food-focused travel package?',
+								type: 'dropdown',
+								options: [
+									'Yes, as a dedicated food trip',
+									'Yes, as part of a larger trip',
+									'Maybe – depends on destination',
+									'Not particularly interested',
+								],
+							},
+						],
+					},
+					{
+						category: 'Activities & Experiences',
+						questions: [
+							{
+								q: 'What types of activities do you look for in a trip?',
+								type: 'dropdown',
+								options: [
+									'Trekking / hiking',
+									'Water sports (rafting, kayaking, surfing)',
+									'Cultural & heritage walks',
+									'Wildlife safaris & bird watching',
+									'Yoga & wellness retreats',
+									'Cooking classes & food tours',
+									'Photography-focused itineraries',
+									'Nightlife & social experiences',
+									'Spiritual & religious experiences',
+									'Extreme adventure sports',
+									'Village & rural experiences',
+									'Craft & art workshops',
+									'Cycling tours',
+									'Camping & night stays under stars',
+								],
+							},
+							{
+								q: 'Do you prefer structured activities or free time to explore?',
+								type: 'rating',
+								options: [
+									'1 – Fully planned schedule every day',
+									'2',
+									'3 – Mix of structured and free time',
+									'4',
+									'5 – Maximum free time to explore',
+								],
+							},
+							{
+								q: 'How important is it to have a local guide during activities?',
+								type: 'dropdown',
+								options: [
+									'Essential – I always want a guide',
+									'Nice to have but not required',
+									'Depends on the activity',
+									'I strongly prefer exploring without a guide',
+								],
+							},
+							{
+								q: 'Would you be interested in community experiences (village events, learning crafts, visiting local family)?',
+								type: 'rating',
+								options: [
+									'1 – Not interested',
+									'2',
+									'3 – Somewhat interested',
+									'4',
+									'5 – This is what I travel for',
+								],
+							},
+							{
+								q: 'How important is it that activities match your physical fitness level?',
+								type: 'rating',
+								options: [
+									"1 – I'll manage whatever is planned",
+									'2',
+									'3 – Somewhat important',
+									'4',
+									'5 – Very important, I need to know intensity',
+								],
+							},
+							{
+								q: 'Would you book a whole trip around a single unique experience?',
+								type: 'dropdown',
+								options: [
+									"Yes – I'd plan a whole trip around it",
+									'Sometimes, for the right experience',
+									'Rarely – I prefer balanced itineraries',
+									'No – I need multiple reasons to visit',
+								],
+							},
+							{
+								q: 'How do you prefer activities to be presented in a package?',
+								type: 'dropdown',
+								options: [
+									'Fixed list of activities in the price',
+									'A menu where I choose what I want',
+									'Core itinerary with optional paid add-ons',
+									'Completely flexible – I plan on arrival',
+								],
+							},
+							{
+								q: 'Would a difficulty rating (easy/moderate/challenging) on activities help you choose?',
+								type: 'dropdown',
+								options: [
+									"Very helpful – I'd filter by this",
+									'Somewhat helpful',
+									'Nice to have',
+									'Not necessary for me',
+								],
+							},
+						],
+					},
+					{
+						category: 'Accommodation',
+						questions: [
+							{
+								q: 'What type of accommodation do you prefer?',
+								type: 'dropdown',
+								options: [
+									'Dorm / budget hostel',
+									'Budget hotel (₹500–₹1,500/night)',
+									'Mid-range hotel (₹1,500–₹4,000/night)',
+									'Homestay with local family',
+									'Boutique / heritage property',
+									'Resort',
+									'Luxury hotel or villa',
+									'Camping / glamping',
+									'Unique stays (treehouses, houseboats, eco-lodges)',
+								],
+							},
+							{
+								q: 'How important is accommodation quality relative to the overall trip experience?',
+								type: 'rating',
+								options: [
+									'1 – I just need a place to sleep',
+									'2',
+									'3 – Moderately important',
+									'4',
+									'5 – Accommodation is core to my experience',
+								],
+							},
+							{
+								q: 'How important is eco-friendly / sustainable accommodation to you?',
+								type: 'rating',
+								options: [
+									'1 – Not a factor',
+									'2',
+									'3 – I consider it if convenient',
+									'4',
+									'5 – I actively seek sustainable options',
+								],
+							},
+							{
+								q: 'Would you share accommodation with other travellers to reduce costs?',
+								type: 'dropdown',
+								options: [
+									'Yes, always happy to share',
+									'Yes, if savings are 30%+ vs private',
+									'Only on specific trip types',
+									'No, I always prefer private accommodation',
+								],
+							},
+							{
+								q: 'How important is Wi-Fi availability at accommodation?',
+								type: 'rating',
+								options: [
+									'1 – I go off-grid by choice',
+									'2',
+									'3 – Nice to have',
+									'4',
+									'5 – Reliable Wi-Fi is non-negotiable',
+								],
+							},
+						],
+					},
+					{
+						category: 'App & Platform Preferences',
+						questions: [
+							{
+								q: 'What would most likely make you switch to a new travel app?',
+								type: 'dropdown',
+								options: [
+									'Better or more competitive prices',
+									'Wider range of operators and packages',
+									'Verified and trustworthy operator profiles',
+									'Simpler and faster booking process',
+									'Ability to customise packages before paying',
+									'Better customer support',
+									'Secure escrow payment',
+									'Community of fellow travellers',
+									'AI-powered personalised recommendations',
+									'Transparent all-inclusive pricing',
+								],
+							},
+							{
+								q: 'How important is a community feature to connect with others going on the same trip?',
+								type: 'rating',
+								options: [
+									'1 – Not interested',
+									'2',
+									'3 – Somewhat interesting',
+									'4',
+									"5 – I'd actively use this",
+								],
+							},
+							{
+								q: 'How much do you trust AI-generated travel itinerary recommendations?',
+								type: 'rating',
+								options: [
+									"1 – I don't trust AI suggestions",
+									'2',
+									"3 – I'd consider them as one input",
+									'4',
+									"5 – I'd fully follow an AI recommendation",
+								],
+							},
+							{
+								q: 'Would you pay ~₹150–₹200/month subscription for early access to deals and exclusive packages?',
+								type: 'dropdown',
+								options: [
+									"Yes – I'd subscribe",
+									"Maybe – I'd try a free trial first",
+									"No – I wouldn't pay for a travel app subscription",
+									'Only if there were significant proven savings',
+								],
+							},
+							{
+								q: 'Would you refer this app if it gave you travel credits per referral?',
+								type: 'dropdown',
+								options: [
+									"Yes, definitely – I'd actively refer people",
+									'Probably – if I liked the app',
+									'Only if credits were significant (₹500+)',
+									"No – I don't share apps even for rewards",
+								],
+							},
+						],
+					},
+					{
+						category: 'Safety & Support',
+						questions: [
+							{
+								q: 'Would you prefer travel insurance bundled into the package price?',
+								type: 'dropdown',
+								options: [
+									'Yes – want it automatically included',
+									'Yes – if priced reasonably',
+									'No – I buy insurance separately',
+									"I don't buy travel insurance at all",
+								],
+							},
+							{
+								q: 'Are there destinations in India you avoid due to safety concerns?',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: 'If an operator cancels last minute, what resolution would you expect?',
+								type: 'dropdown',
+								options: [
+									'Full refund immediately',
+									'Full refund + alternative trip arranged by platform',
+									'Partial refund + credit for future booking',
+									'Platform mediates but I handle with operator',
+									"I'd manage directly with the operator",
+								],
+							},
+							{
+								q: 'How comfortable are you sharing live location with the app for safety tracking?',
+								type: 'dropdown',
+								options: [
+									'Very comfortable – safety first',
+									"Comfortable if it's optional",
+									'Somewhat uncomfortable – only in emergencies',
+									'Not comfortable at all – privacy matters more',
+								],
+							},
+						],
+					},
+				],
+				travel: [
+					{
+						category: 'Business Profile',
+						questions: [
+							{
+								q: 'What type of travel business do you operate?',
+								type: 'dropdown',
+								options: [
+									'Travel Agency',
+									'Tour Operator',
+									'DMC (Destination Management Company)',
+									'Independent Agent',
+									'Other',
+								],
+							},
+							{
+								q: 'How long have you been in business?',
+								type: 'dropdown',
+								options: [
+									'Less than 1 year',
+									'1–3 years',
+									'3–5 years',
+									'5–10 years',
+									'More than 10 years',
+								],
+							},
+							{
+								q: 'Which destinations/categories do you specialize in?',
+								type: 'dropdown',
+								options: [
+									'Domestic Tours',
+									'International Tours',
+									'Adventure Travel',
+									'Spiritual/Honeymoon',
+									'Luxury Packages',
+									'Customized Itineraries',
+								],
+							},
+							{
+								q: 'Approximate monthly customer inquiries received?',
+								type: 'dropdown',
+								options: [
+									'Less than 50',
+									'50–100',
+									'100–500',
+									'500–1000',
+									'More than 1000',
+								],
+							},
+						],
+					},
+					{
+						category: 'Challenges',
+						questions: [
+							{
+								q: 'What are your biggest business challenges today?',
+								type: 'dropdown',
+								options: [
+									'High B2C lead acquisition costs',
+									'High B2B agent platform commissions',
+									'Operational inefficiencies',
+									'Client trust & booking cancellations',
+									'Finding reliable local suppliers',
+								],
+							},
+							{
+								q: 'How do customers currently discover your business?',
+								type: 'dropdown',
+								options: [
+									'Google Maps / Local Search',
+									'Social Media (Instagram/FB)',
+									'Referrals / Word of mouth',
+									'B2B travel agents',
+									'Offline marketing/flyers',
+								],
+							},
+							{
+								q: 'Do existing travel marketplaces provide enough value?',
+								type: 'radio',
+								options: ['Yes', 'No'],
+							},
+							{
+								q: 'What do you dislike most about existing travel platforms?',
+								type: 'textarea',
+								options: [],
+							},
+						],
+					},
+					{
+						category: 'App Validation',
+						questions: [
+							{
+								q: 'Would you list your packages on a package comparison platform?',
+								type: 'rating',
+								options: [],
+							},
+							{
+								q: 'What would motivate you most to join such a platform?',
+								type: 'dropdown',
+								options: [
+									'More high-intent tourist enquiries',
+									'Lower commission models than standard sites',
+									'Tools to build and share custom itineraries',
+									'Verified customer review badges',
+									'Access to tourist trend data',
+								],
+							},
+							{
+								q: 'Which feature would be most valuable for your business?',
+								type: 'dropdown',
+								options: [
+									'AI itinerary builder & planner',
+									'Supplier directory / partner matching',
+									'Dynamic packaging & pricing tools',
+									'Customer CRM & booking dashboard',
+									'Integrated payment gateway',
+								],
+							},
+							{
+								q: 'Would AI-based pricing and demand insights help your business?',
+								type: 'radio',
+								options: ['Yes', 'No'],
+							},
+							{
+								q: 'How important is customer trust & verification?',
+								type: 'rating',
+								options: [],
+							},
+						],
+					},
+					{
+						category: 'Revenue Validation',
+						questions: [
+							{
+								q: 'Which payment model would you prefer?',
+								type: 'dropdown',
+								options: [
+									'Flat monthly subscription',
+									'Commission per booking',
+									'Hybrid model',
+									'Pay-per-lead / Pay-per-inquiry',
+								],
+							},
+							{
+								q: 'Would you pay for premium tools if they get you more bookings or enquiries ?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+							{
+								q: 'Which premium tools would you pay for?',
+								type: 'dropdown',
+								options: [
+									'AI Pricing Recommendations',
+									'Verified Badge / Trusted Seller',
+									'SEO/Marketing boost',
+									'Advanced Analytics & Demand forecasts',
+								],
+							},
+							{
+								q: 'What monthly amount would you realistically pay for useful business tools?',
+								type: 'dropdown',
+								options: [
+									'₹0 (Free only)',
+									'Up to ₹1,000',
+									'₹1,000 – ₹2,500',
+									'₹2,500 – ₹5,000',
+									'Above ₹5,000',
+								],
+							},
+						],
+					},
+					{
+						category: 'Product Experience',
+						questions: [
+							{
+								q: 'How easy should package uploading be?',
+								type: 'dropdown',
+								options: [
+									'Extremely easy (bulk upload/excel)',
+									'Standard step-by-step form',
+									'API integration with existing system',
+								],
+							},
+							{
+								q: 'Would you prefer direct bookings, inquiries, or both?',
+								type: 'dropdown',
+								options: [
+									'Direct bookings only',
+									'Inquiries only',
+									'Both bookings & inquiries',
+								],
+							},
+							{
+								q: 'What would stop you from using such a platform?',
+								type: 'dropdown',
+								options: [
+									'High commissions',
+									'Complex onboarding / setup',
+									'Lack of customer traffic',
+									'Lack of control over pricing',
+								],
+							},
+							{
+								q: 'Would you join as an early beta partner?',
+								type: 'radio',
+								options: ['Yes', 'Maybe', 'No'],
+							},
+							{
+								q: 'Would you recommend such a platform to others?',
+								type: 'rating',
+								options: [],
+							},
+							{
+								q: 'Current apps you are using',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: 'Feedbacks on current apps',
+								type: 'text',
+								options: [],
+							},
+							{
+								q: 'Current source of lead generation',
+								type: 'text',
+								options: [],
+							},
+						],
+					},
+				],
+			};
+
+			// In-memory labels mapping for survey selection cards
+			const SURVEY_META = {
+				cafe: {
+					title: 'Cafes & Restaurants',
+					desc: 'For food business owners, cafes, and eateries operating in tourist-heavy zones.',
+					icon: '☕',
+				},
+				tour: {
+					title: 'Tour Providers',
+					desc: 'For local tour operators, adventure guides, and activity organizers.',
+					icon: '🧭',
+				},
+				tourist: {
+					title: 'Travelers & Tourists',
+					desc: 'For individuals who travel within India and explore regional destinations.',
+					icon: '🎒',
+				},
+				travel: {
+					title: 'Travel Agencies',
+					desc: 'For travel agents, trip planners, and B2B holiday package creators.',
+					icon: '✈️',
+				},
+			};
+
+			// ── 2. STATE ─────────────────────────────────────────────────────
+			let state = {
+				currentSurvey: null, // 'cafe' | 'tour' | 'tourist' | 'travel'
+				currentSectionIndex: 0,
+				answers: {}, // maps question index (or identifier) to response value
+				isSubmitted: false,
+			};
+
+			// ── 3. ROUTER ────────────────────────────────────────────────────
+			function router() {
+				const hash = window.location.hash.substring(1);
+
+				if (['cafe', 'tour', 'tourist', 'travel'].includes(hash)) {
+					state.currentSurvey = hash;
+					state.isSubmitted = false;
+
+					// Restore answers from localStorage if any exist
+					state.answers = loadAnswers(hash) || {};
+
+					// Get last saved section index from local storage to resume
+					const savedIndex = localStorage.getItem(
+						`voyana_survey_${hash}_index`,
+					);
+					state.currentSectionIndex = savedIndex ? parseInt(savedIndex, 10) : 0;
+
+					renderSurvey(hash);
+				} else {
+					state.currentSurvey = null;
+					state.isSubmitted = false;
+					state.currentSectionIndex = 0;
+					state.answers = {};
+					renderLanding();
+				}
+			}
+
+			// ── 4. RENDERING PAGES ───────────────────────────────────────────
+
+			// Render the main landing page with cards linking to each survey
+			function renderLanding() {
+				const container = document.getElementById('app');
+				container.innerHTML = `
         <div class="landing-container">
           <header class="landing-header">
             <div class="landing-logo">Voyana Research</div>
@@ -2381,9 +2369,10 @@
             </p>
           </header>
           <div class="grid-cards">
-            ${Object.keys(SURVEY_META).map(key => {
-              const meta = SURVEY_META[key];
-              return `
+            ${Object.keys(SURVEY_META)
+							.map((key) => {
+								const meta = SURVEY_META[key];
+								return `
                 <a href="#${key}" class="card-link">
                   <div class="survey-card">
                     <div>
@@ -2400,23 +2389,24 @@
                   </div>
                 </a>
               `;
-            }).join('')}
+							})
+							.join('')}
           </div>
         </div>
       `;
-    }
+			}
 
-    // Render survey page layout skeleton
-    function renderSurvey(type) {
-      const container = document.getElementById('app');
-      const data = SURVEYS[type];
-      const meta = SURVEY_META[type];
-      
-      // Determine layout based on screen width
-      const isWide = window.innerWidth >= 1441;
-      
-      if (isWide) {
-        container.innerHTML = `
+			// Render survey page layout skeleton
+			function renderSurvey(type) {
+				const container = document.getElementById('app');
+				const data = SURVEYS[type];
+				const meta = SURVEY_META[type];
+
+				// Determine layout based on screen width
+				const isWide = window.innerWidth >= 1441;
+
+				if (isWide) {
+					container.innerHTML = `
           <div class="survey-wrapper">
             <div class="survey-sidebar">
               <div class="survey-sidebar-inner">
@@ -2442,8 +2432,8 @@
             </div>
           </div>
         `;
-      } else {
-        container.innerHTML = `
+				} else {
+					container.innerHTML = `
           <div class="survey-wrapper">
             <header class="survey-header">
               <div class="brand-bar">
@@ -2467,478 +2457,588 @@
             </main>
           </div>
         `;
-      }
-      
-      renderSection(state.currentSectionIndex);
-    }
+				}
 
-    // Render questions for a specific section index
-    function renderSection(sectionIndex) {
-      const type = state.currentSurvey;
-      const data = SURVEYS[type];
-      const section = data[sectionIndex];
-      const totalSections = data.length;
-      
-      // Update Stepper and Header information
-      const stepperContainer = document.querySelector('.category-stepper-container');
-      const progressContainer = document.querySelector('.progress-track-container');
-      
-      const progressPercent = Math.round((sectionIndex / totalSections) * 100);
-      
-      stepperContainer.innerHTML = `
+				renderSection(state.currentSectionIndex);
+			}
+
+			// Render questions for a specific section index
+			function renderSection(sectionIndex) {
+				const type = state.currentSurvey;
+				const data = SURVEYS[type];
+				const section = data[sectionIndex];
+				const totalSections = data.length;
+
+				// Update Stepper and Header information
+				const stepperContainer = document.querySelector(
+					'.category-stepper-container',
+				);
+				const progressContainer = document.querySelector(
+					'.progress-track-container',
+				);
+
+				const progressPercent = Math.round(
+					(sectionIndex / totalSections) * 100,
+				);
+
+				stepperContainer.innerHTML = `
         <div class="category-stepper">
           <span class="step-indicator">Step ${sectionIndex + 1} of ${totalSections}</span>
         </div>
         <h2 class="section-title">${section.category}</h2>
       `;
-      
-      progressContainer.innerHTML = `
+
+				progressContainer.innerHTML = `
         <div class="progress-track">
           <div class="progress-fill" style="width: ${progressPercent || 2}%"></div>
         </div>
       `;
-      
-      // Render questions form
-      const questionsForm = document.getElementById('questions-form');
-      questionsForm.innerHTML = '';
-      
-      section.questions.forEach((q, idx) => {
-        // Construct question card element
-        const qCard = document.createElement('div');
-        qCard.className = 'question-card';
-        // Apply staggering animation delay offset
-        qCard.style.animationDelay = `${idx * 80}ms`;
-        qCard.id = `qc-${idx}`;
-        
-        // Add Question Text Label
-        const qText = document.createElement('label');
-        qText.className = 'question-text';
-        qText.setAttribute('for', `q-input-${idx}`);
-        qText.innerHTML = `${q.q}<span class="required-star" aria-hidden="true">*</span>`;
-        qCard.appendChild(qText);
-        
-        // Render specific inputs
-        const inputContainer = renderQuestionInput(q, idx, section.category);
-        qCard.appendChild(inputContainer);
-        
-        // Append error elements
-        const errorMsg = document.createElement('div');
-        errorMsg.className = 'error-message';
-        errorMsg.innerHTML = `
+
+				// Render questions form
+				const questionsForm = document.getElementById('questions-form');
+				questionsForm.innerHTML = '';
+
+				section.questions.forEach((q, idx) => {
+					// Construct question card element
+					const qCard = document.createElement('div');
+					qCard.className = 'question-card';
+					// Apply staggering animation delay offset
+					qCard.style.animationDelay = `${idx * 80}ms`;
+					qCard.id = `qc-${idx}`;
+
+					// Add Question Text Label
+					const qText = document.createElement('label');
+					qText.className = 'question-text';
+					qText.setAttribute('for', `q-input-${idx}`);
+					qText.innerHTML = `${q.q}<span class="required-star" aria-hidden="true">*</span>`;
+					qCard.appendChild(qText);
+
+					// Render specific inputs
+					const inputContainer = renderQuestionInput(q, idx, section.category);
+					qCard.appendChild(inputContainer);
+
+					// Append error elements
+					const errorMsg = document.createElement('div');
+					errorMsg.className = 'error-message';
+					errorMsg.innerHTML = `
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 13C10.3137 13 13 10.3137 13 7C13 3.68629 10.3137 1 7 1C3.68629 1 1 3.68629 1 7C1 10.3137 3.68629 13 7 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M7 4V7.5M7 10H7.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           Please answer this question to proceed.
         `;
-        qCard.appendChild(errorMsg);
-        
-        questionsForm.appendChild(qCard);
-      });
-      
-      // Render footer navigation buttons
-      const footer = document.getElementById('navigation-footer');
-      const isFirst = sectionIndex === 0;
-      const isLast = sectionIndex === totalSections - 1;
-      
-      footer.innerHTML = `
-        ${isFirst ? `
+					qCard.appendChild(errorMsg);
+
+					questionsForm.appendChild(qCard);
+				});
+
+				// Render footer navigation buttons
+				const footer = document.getElementById('navigation-footer');
+				const isFirst = sectionIndex === 0;
+				const isLast = sectionIndex === totalSections - 1;
+
+				footer.innerHTML = `
+        ${
+					isFirst
+						? `
           <button class="btn btn-secondary btn-back-home" onclick="navigateHome()">
             Cancel
           </button>
-        ` : `
+        `
+						: `
           <button class="btn btn-secondary" onclick="prevSection()">
             <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(180deg)">
               <path d="M1 9L5 5L1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             Back
           </button>
-        `}
+        `
+				}
         
         <button class="btn btn-primary" onclick="${isLast ? 'submitSurvey()' : 'nextSection()'}">
           ${isLast ? 'Submit Survey' : 'Save & Continue'}
-          ${isLast ? `
+          ${
+						isLast
+							? `
             <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 6L5 10L13 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          ` : `
+          `
+							: `
             <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 9L5 5L1 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          `}
+          `
+					}
         </button>
       `;
 
-      // Smooth scroll back to top of main area
-      const scrollTarget = window.innerWidth >= 1441 ? document.querySelector('.survey-main') : window;
-      scrollTarget.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+				// Smooth scroll back to top of main area
+				const scrollTarget =
+					window.innerWidth >= 1441
+						? document.querySelector('.survey-main')
+						: window;
+				scrollTarget.scrollTo({ top: 0, behavior: 'smooth' });
+			}
 
-    // Render corresponding form input components based on Question data
-    function renderQuestionInput(q, idx, category) {
-      const container = document.createElement('div');
-      container.className = 'input-container';
-      
-      // Create unique state keys using category and index
-      const stateKey = `${category}__${q.q}`;
-      const savedVal = state.answers[stateKey];
-      
-      if (q.type === 'text') {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = `q-input-${idx}`;
-        input.value = savedVal || '';
-        input.placeholder = "Type your response here...";
-        input.setAttribute('aria-required', 'true');
-        input.addEventListener('input', (e) => {
-          state.answers[stateKey] = e.target.value;
-          // Clear validation borders dynamically on edit
-          if(e.target.value.trim()) {
-            document.getElementById(`qc-${idx}`).classList.remove('error');
-          }
-        });
-        container.appendChild(input);
-        
-      } else if (q.type === 'textarea') {
-        const textarea = document.createElement('textarea');
-        textarea.id = `q-input-${idx}`;
-        textarea.value = savedVal || '';
-        textarea.placeholder = "Write your detailed feedback here...";
-        textarea.setAttribute('aria-required', 'true');
-        textarea.addEventListener('input', (e) => {
-          state.answers[stateKey] = e.target.value;
-          if(e.target.value.trim()) {
-            document.getElementById(`qc-${idx}`).classList.remove('error');
-          }
-        });
-        container.appendChild(textarea);
-        
-      } else if (q.type === 'dropdown') {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'select-wrapper';
-        
-        const select = document.createElement('select');
-        select.id = `q-input-${idx}`;
-        select.setAttribute('aria-required', 'true');
-        
-        const placeholderOpt = document.createElement('option');
-        placeholderOpt.value = '';
-        placeholderOpt.textContent = "Select an option...";
-        placeholderOpt.disabled = true;
-        placeholderOpt.selected = !savedVal;
-        select.appendChild(placeholderOpt);
-        
-        q.options.forEach(opt => {
-          const option = document.createElement('option');
-          option.value = opt;
-          option.textContent = opt;
-          option.selected = savedVal === opt;
-          select.appendChild(option);
-        });
-        
-        select.addEventListener('change', (e) => {
-          state.answers[stateKey] = e.target.value;
-          if(e.target.value) {
-            document.getElementById(`qc-${idx}`).classList.remove('error');
-          }
-        });
-        
-        wrapper.appendChild(select);
-        container.appendChild(wrapper);
-        
-      } else if (q.type === 'rating') {
-        const starContainer = document.createElement('div');
-        starContainer.className = 'star-rating-container';
-        starContainer.id = `q-input-${idx}`;
-        
-        const starRow = document.createElement('div');
-        starRow.className = 'star-row';
-        starRow.setAttribute('role', 'radiogroup');
-        starRow.setAttribute('aria-label', q.q);
-        
-        const selectedRating = savedVal ? parseInt(savedVal, 10) : 0;
-        
-        for (let s = 1; s <= 5; s++) {
-          const star = document.createElement('span');
-          star.className = `star ${s <= selectedRating ? 'filled' : ''}`;
-          star.innerHTML = '★';
-          star.setAttribute('role', 'radio');
-          star.setAttribute('aria-checked', s === selectedRating ? 'true' : 'false');
-          star.setAttribute('tabindex', s === selectedRating || (selectedRating === 0 && s === 1) ? '0' : '-1');
-          star.setAttribute('data-value', s);
-          
-          // Hover effects
-          star.addEventListener('mouseenter', () => highlightStars(starRow, s));
-          star.addEventListener('mouseleave', () => resetStars(starRow, state.answers[stateKey] || 0));
-          
-          // Select click
-          star.addEventListener('click', () => {
-            state.answers[stateKey] = s;
-            updateStarAria(starRow, s);
-            document.getElementById(`qc-${idx}`).classList.remove('error');
-          });
-          
-          // Keyboard navigate
-          star.addEventListener('keydown', (e) => {
-            if (e.key === ' ' || e.key === 'Enter') {
-              e.preventDefault();
-              state.answers[stateKey] = s;
-              updateStarAria(starRow, s);
-              star.focus();
-              document.getElementById(`qc-${idx}`).classList.remove('error');
-            }
-          });
-          
-          starRow.appendChild(star);
-        }
-        
-        const ratingLabel = document.createElement('span');
-        ratingLabel.className = 'rating-label';
-        ratingLabel.textContent = selectedRating ? `${selectedRating} of 5` : 'Rate 1 to 5';
-        
-        starContainer.appendChild(starRow);
-        starContainer.appendChild(ratingLabel);
-        container.appendChild(starContainer);
-        
-      } else if (q.type === 'radio' || q.type === 'checkbox') {
-        const pillsGroup = document.createElement('div');
-        pillsGroup.className = `pills-group type-${q.type}`;
-        pillsGroup.id = `q-input-${idx}`;
-        pillsGroup.setAttribute('role', q.type === 'radio' ? 'radiogroup' : 'group');
-        pillsGroup.setAttribute('aria-label', q.q);
-        
-        const isMulti = q.type === 'checkbox';
-        
-        // Initial setup for loaded values
-        let currentSelection = savedVal || (isMulti ? [] : null);
-        
-        q.options.forEach((opt, oIdx) => {
-          const pill = document.createElement('div');
-          
-          const isSelected = isMulti 
-            ? currentSelection.includes(opt)
-            : currentSelection === opt;
-            
-          pill.className = `option-pill ${isSelected ? 'selected' : ''}`;
-          pill.setAttribute('role', isMulti ? 'checkbox' : 'radio');
-          pill.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-          pill.setAttribute('tabindex', '0');
-          
-          pill.innerHTML = `
+			// Render corresponding form input components based on Question data
+			function renderQuestionInput(q, idx, category) {
+				const container = document.createElement('div');
+				container.className = 'input-container';
+
+				// Create unique state keys using category and index
+				const stateKey = `${category}__${q.q}`;
+				const savedVal = state.answers[stateKey];
+
+				if (q.type === 'text') {
+					const input = document.createElement('input');
+					input.type = 'text';
+					input.id = `q-input-${idx}`;
+					input.value = savedVal || '';
+					input.placeholder = 'Type your response here...';
+					input.setAttribute('aria-required', 'true');
+					input.addEventListener('input', (e) => {
+						state.answers[stateKey] = e.target.value;
+						// Clear validation borders dynamically on edit
+						if (e.target.value.trim()) {
+							document.getElementById(`qc-${idx}`).classList.remove('error');
+						}
+					});
+					container.appendChild(input);
+				} else if (q.type === 'textarea') {
+					const textarea = document.createElement('textarea');
+					textarea.id = `q-input-${idx}`;
+					textarea.value = savedVal || '';
+					textarea.placeholder = 'Write your detailed feedback here...';
+					textarea.setAttribute('aria-required', 'true');
+					textarea.addEventListener('input', (e) => {
+						state.answers[stateKey] = e.target.value;
+						if (e.target.value.trim()) {
+							document.getElementById(`qc-${idx}`).classList.remove('error');
+						}
+					});
+					container.appendChild(textarea);
+				} else if (q.type === 'dropdown') {
+					const wrapper = document.createElement('div');
+					wrapper.className = 'select-wrapper';
+
+					const select = document.createElement('select');
+					select.id = `q-input-${idx}`;
+					select.setAttribute('aria-required', 'true');
+
+					const placeholderOpt = document.createElement('option');
+					placeholderOpt.value = '';
+					placeholderOpt.textContent = 'Select an option...';
+					placeholderOpt.disabled = true;
+					placeholderOpt.selected = !savedVal;
+					select.appendChild(placeholderOpt);
+
+					q.options.forEach((opt) => {
+						const option = document.createElement('option');
+						option.value = opt;
+						option.textContent = opt;
+						option.selected = savedVal === opt;
+						select.appendChild(option);
+					});
+
+					select.addEventListener('change', (e) => {
+						state.answers[stateKey] = e.target.value;
+						if (e.target.value) {
+							document.getElementById(`qc-${idx}`).classList.remove('error');
+						}
+					});
+
+					wrapper.appendChild(select);
+					container.appendChild(wrapper);
+				} else if (q.type === 'rating') {
+					const starContainer = document.createElement('div');
+					starContainer.className = 'star-rating-container';
+					starContainer.id = `q-input-${idx}`;
+
+					const starRow = document.createElement('div');
+					starRow.className = 'star-row';
+					starRow.setAttribute('role', 'radiogroup');
+					starRow.setAttribute('aria-label', q.q);
+
+					const selectedRating = savedVal ? parseInt(savedVal, 10) : 0;
+
+					for (let s = 1; s <= 5; s++) {
+						const star = document.createElement('span');
+						star.className = `star ${s <= selectedRating ? 'filled' : ''}`;
+						star.innerHTML = '★';
+						star.setAttribute('role', 'radio');
+						star.setAttribute(
+							'aria-checked',
+							s === selectedRating ? 'true' : 'false',
+						);
+						star.setAttribute(
+							'tabindex',
+							s === selectedRating || (selectedRating === 0 && s === 1)
+								? '0'
+								: '-1',
+						);
+						star.setAttribute('data-value', s);
+
+						// Hover effects
+						star.addEventListener('mouseenter', () =>
+							highlightStars(starRow, s),
+						);
+						star.addEventListener('mouseleave', () =>
+							resetStars(starRow, state.answers[stateKey] || 0),
+						);
+
+						// Select click
+						star.addEventListener('click', () => {
+							state.answers[stateKey] = s;
+							updateStarAria(starRow, s);
+							document.getElementById(`qc-${idx}`).classList.remove('error');
+						});
+
+						// Keyboard navigate
+						star.addEventListener('keydown', (e) => {
+							if (e.key === ' ' || e.key === 'Enter') {
+								e.preventDefault();
+								state.answers[stateKey] = s;
+								updateStarAria(starRow, s);
+								star.focus();
+								document.getElementById(`qc-${idx}`).classList.remove('error');
+							}
+						});
+
+						starRow.appendChild(star);
+					}
+
+					const ratingLabel = document.createElement('span');
+					ratingLabel.className = 'rating-label';
+					ratingLabel.textContent = selectedRating
+						? `${selectedRating} of 5`
+						: 'Rate 1 to 5';
+
+					starContainer.appendChild(starRow);
+					starContainer.appendChild(ratingLabel);
+					container.appendChild(starContainer);
+				} else if (q.type === 'radio' || q.type === 'checkbox') {
+					const pillsGroup = document.createElement('div');
+					pillsGroup.className = `pills-group type-${q.type}`;
+					pillsGroup.id = `q-input-${idx}`;
+					pillsGroup.setAttribute(
+						'role',
+						q.type === 'radio' ? 'radiogroup' : 'group',
+					);
+					pillsGroup.setAttribute('aria-label', q.q);
+
+					const isMulti = q.type === 'checkbox';
+
+					// Initial setup for loaded values
+					let currentSelection = savedVal || (isMulti ? [] : null);
+
+					q.options.forEach((opt, oIdx) => {
+						const pill = document.createElement('div');
+
+						const isSelected = isMulti
+							? currentSelection.includes(opt)
+							: currentSelection === opt;
+
+						pill.className = `option-pill ${isSelected ? 'selected' : ''}`;
+						pill.setAttribute('role', isMulti ? 'checkbox' : 'radio');
+						pill.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+						pill.setAttribute('tabindex', '0');
+
+						pill.innerHTML = `
             <div class="pill-indicator"></div>
             <span>${opt}</span>
           `;
-          
-          const handleSelection = () => {
-            if (isMulti) {
-              if (currentSelection.includes(opt)) {
-                currentSelection = currentSelection.filter(item => item !== opt);
-                pill.classList.remove('selected');
-                pill.setAttribute('aria-checked', 'false');
-              } else {
-                currentSelection.push(opt);
-                pill.classList.add('selected');
-                pill.setAttribute('aria-checked', 'true');
-              }
-              state.answers[stateKey] = currentSelection;
-            } else {
-              // Deselect other radio pills
-              pillsGroup.querySelectorAll('.option-pill').forEach(el => {
-                el.classList.remove('selected');
-                el.setAttribute('aria-checked', 'false');
-              });
-              
-              currentSelection = opt;
-              pill.classList.add('selected');
-              pill.setAttribute('aria-checked', 'true');
-              state.answers[stateKey] = opt;
-            }
-            
-            // Check if there are answers to remove validation error styling
-            const hasResponse = isMulti ? currentSelection.length > 0 : !!currentSelection;
-            if(hasResponse) {
-              document.getElementById(`qc-${idx}`).classList.remove('error');
-            }
-          };
-          
-          pill.addEventListener('click', handleSelection);
-          
-          pill.addEventListener('keydown', (e) => {
-            if (e.key === ' ' || e.key === 'Enter') {
-              e.preventDefault();
-              handleSelection();
-            }
-          });
-          
-          pillsGroup.appendChild(pill);
-        });
-        
-        container.appendChild(pillsGroup);
-      }
-      
-      return container;
-    }
 
-    // Highlight stars on hover
-    function highlightStars(starRow, count) {
-      starRow.querySelectorAll('.star').forEach(star => {
-        const val = parseInt(star.getAttribute('data-value'), 10);
-        if (val <= count) {
-          star.classList.add('hovered');
-        } else {
-          star.classList.remove('hovered');
-        }
-      });
-    }
+						const handleSelection = () => {
+							if (isMulti) {
+								if (currentSelection.includes(opt)) {
+									currentSelection = currentSelection.filter(
+										(item) => item !== opt,
+									);
+									pill.classList.remove('selected');
+									pill.setAttribute('aria-checked', 'false');
+								} else {
+									currentSelection.push(opt);
+									pill.classList.add('selected');
+									pill.setAttribute('aria-checked', 'true');
+								}
+								state.answers[stateKey] = currentSelection;
+							} else {
+								// Deselect other radio pills
+								pillsGroup.querySelectorAll('.option-pill').forEach((el) => {
+									el.classList.remove('selected');
+									el.setAttribute('aria-checked', 'false');
+								});
 
-    // Reset stars on hover out to currently saved value
-    function resetStars(starRow, savedVal) {
-      starRow.querySelectorAll('.star').forEach(star => {
-        star.classList.remove('hovered');
-        const val = parseInt(star.getAttribute('data-value'), 10);
-        if (val <= savedVal) {
-          star.classList.add('filled');
-        } else {
-          star.classList.remove('filled');
-        }
-      });
-    }
+								currentSelection = opt;
+								pill.classList.add('selected');
+								pill.setAttribute('aria-checked', 'true');
+								state.answers[stateKey] = opt;
+							}
 
-    // Update star active state on click
-    function updateStarAria(starRow, value) {
-      starRow.querySelectorAll('.star').forEach(star => {
-        const val = parseInt(star.getAttribute('data-value'), 10);
-        star.classList.remove('hovered');
-        if (val <= value) {
-          star.classList.add('filled');
-          star.setAttribute('aria-checked', 'true');
-        } else {
-          star.classList.remove('filled');
-          star.setAttribute('aria-checked', 'false');
-        }
-        // Update tab index for focusability
-        star.setAttribute('tabindex', val === value ? '0' : '-1');
-      });
-      const container = starRow.parentElement;
-      const label = container.querySelector('.rating-label');
-      label.textContent = `${value} of 5`;
-    }
+							// Check if there are answers to remove validation error styling
+							const hasResponse = isMulti
+								? currentSelection.length > 0
+								: !!currentSelection;
+							if (hasResponse) {
+								document.getElementById(`qc-${idx}`).classList.remove('error');
+							}
+						};
 
-    // ── 5. NAVIGATION LOGIC & FLOW ────────────────────────────────────
-    
-    // Check validation of all questions in current category section
-    function validateSection() {
-      const type = state.currentSurvey;
-      const data = SURVEYS[type];
-      const section = data[state.currentSectionIndex];
-      let firstErrorCard = null;
-      let isValid = true;
-      
-      section.questions.forEach((q, idx) => {
-        const stateKey = `${section.category}__${q.q}`;
-        const val = state.answers[stateKey];
-        let qValid = true;
-        
-        if (q.type === 'text' || q.type === 'textarea') {
-          if (!val || val.trim() === '') qValid = false;
-        } else if (q.type === 'dropdown') {
-          if (!val) qValid = false;
-        } else if (q.type === 'rating') {
-          if (!val || val === 0) qValid = false;
-        } else if (q.type === 'radio') {
-          if (!val) qValid = false;
-        } else if (q.type === 'checkbox') {
-          if (!val || val.length === 0) qValid = false;
-        }
-        
-        const qCard = document.getElementById(`qc-${idx}`);
-        if (!qValid) {
-          isValid = false;
-          qCard.classList.add('error');
-          if (!firstErrorCard) {
-            firstErrorCard = qCard;
-          }
-        } else {
-          qCard.classList.remove('error');
-        }
-      });
-      
-      if (firstErrorCard) {
-        // Scroll smoothly to first invalid question
-        firstErrorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Set focus to the input inside
-        const input = firstErrorCard.querySelector('input, textarea, select, .option-pill, .star');
-        if(input) input.focus();
-      }
-      
-      return isValid;
-    }
+						pill.addEventListener('click', handleSelection);
 
-    // Navigate to next wizard section
-    function nextSection() {
-      if (!validateSection()) return;
-      
-      // Save current progress answers to localStorage
-      saveAnswers(state.currentSurvey, state.answers);
-      
-      // Fade out section transition
-      const mainContent = document.querySelector('.survey-main') || document.querySelector('.survey-main-inline');
-      mainContent.style.transition = 'opacity 300ms ease-out, transform 300ms ease-out';
-      mainContent.style.opacity = '0';
-      mainContent.style.transform = 'translateY(16px)';
-      
-      setTimeout(() => {
-        state.currentSectionIndex++;
-        // Keep track of index position to allow user resuming
-        localStorage.setItem(`voyana_survey_${state.currentSurvey}_index`, state.currentSectionIndex);
-        
-        renderSection(state.currentSectionIndex);
-        
-        mainContent.style.opacity = '1';
-        mainContent.style.transform = 'translateY(0)';
-      }, 300);
-    }
+						pill.addEventListener('keydown', (e) => {
+							if (e.key === ' ' || e.key === 'Enter') {
+								e.preventDefault();
+								handleSelection();
+							}
+						});
 
-    // Navigate back to previous wizard section
-    function prevSection() {
-      if (state.currentSectionIndex === 0) return;
-      
-      const mainContent = document.querySelector('.survey-main') || document.querySelector('.survey-main-inline');
-      mainContent.style.transition = 'opacity 300ms ease-out, transform 300ms ease-out';
-      mainContent.style.opacity = '0';
-      mainContent.style.transform = 'translateY(16px)';
-      
-      setTimeout(() => {
-        state.currentSectionIndex--;
-        localStorage.setItem(`voyana_survey_${state.currentSurvey}_index`, state.currentSectionIndex);
-        
-        renderSection(state.currentSectionIndex);
-        
-        mainContent.style.opacity = '1';
-        mainContent.style.transform = 'translateY(0)';
-      }, 300);
-    }
+						pillsGroup.appendChild(pill);
+					});
 
-    // Submit Survey Responses
-    function submitSurvey() {
-      if (!validateSection()) return;
-      
-      // Save final responses
-      saveAnswers(state.currentSurvey, state.answers);
-      
-      // Remove wizard states from localStorage
-      localStorage.removeItem(`voyana_survey_${state.currentSurvey}_index`);
-      localStorage.removeItem(`voyana_survey_${state.currentSurvey}_answers`);
-      
-      renderThankYou();
-    }
+					container.appendChild(pillsGroup);
+				}
 
-    // Render confirmation thank-you screen
-    function renderThankYou() {
-      const container = document.getElementById('app');
-      const meta = SURVEY_META[state.currentSurvey];
-      
-      container.innerHTML = `
+				return container;
+			}
+
+			// Highlight stars on hover
+			function highlightStars(starRow, count) {
+				starRow.querySelectorAll('.star').forEach((star) => {
+					const val = parseInt(star.getAttribute('data-value'), 10);
+					if (val <= count) {
+						star.classList.add('hovered');
+					} else {
+						star.classList.remove('hovered');
+					}
+				});
+			}
+
+			// Reset stars on hover out to currently saved value
+			function resetStars(starRow, savedVal) {
+				starRow.querySelectorAll('.star').forEach((star) => {
+					star.classList.remove('hovered');
+					const val = parseInt(star.getAttribute('data-value'), 10);
+					if (val <= savedVal) {
+						star.classList.add('filled');
+					} else {
+						star.classList.remove('filled');
+					}
+				});
+			}
+
+			// Update star active state on click
+			function updateStarAria(starRow, value) {
+				starRow.querySelectorAll('.star').forEach((star) => {
+					const val = parseInt(star.getAttribute('data-value'), 10);
+					star.classList.remove('hovered');
+					if (val <= value) {
+						star.classList.add('filled');
+						star.setAttribute('aria-checked', 'true');
+					} else {
+						star.classList.remove('filled');
+						star.setAttribute('aria-checked', 'false');
+					}
+					// Update tab index for focusability
+					star.setAttribute('tabindex', val === value ? '0' : '-1');
+				});
+				const container = starRow.parentElement;
+				const label = container.querySelector('.rating-label');
+				label.textContent = `${value} of 5`;
+			}
+
+			// ── 5. NAVIGATION LOGIC & FLOW ────────────────────────────────────
+
+			// Check validation of all questions in current category section
+			function validateSection() {
+				const type = state.currentSurvey;
+				const data = SURVEYS[type];
+				const section = data[state.currentSectionIndex];
+				let firstErrorCard = null;
+				let isValid = true;
+
+				section.questions.forEach((q, idx) => {
+					const stateKey = `${section.category}__${q.q}`;
+					const val = state.answers[stateKey];
+					let qValid = true;
+
+					if (q.type === 'text' || q.type === 'textarea') {
+						if (!val || val.trim() === '') qValid = false;
+					} else if (q.type === 'dropdown') {
+						if (!val) qValid = false;
+					} else if (q.type === 'rating') {
+						if (!val || val === 0) qValid = false;
+					} else if (q.type === 'radio') {
+						if (!val) qValid = false;
+					} else if (q.type === 'checkbox') {
+						if (!val || val.length === 0) qValid = false;
+					}
+
+					const qCard = document.getElementById(`qc-${idx}`);
+					if (!qValid) {
+						isValid = false;
+						qCard.classList.add('error');
+						if (!firstErrorCard) {
+							firstErrorCard = qCard;
+						}
+					} else {
+						qCard.classList.remove('error');
+					}
+				});
+
+				if (firstErrorCard) {
+					// Scroll smoothly to first invalid question
+					firstErrorCard.scrollIntoView({
+						behavior: 'smooth',
+						block: 'center',
+					});
+					// Set focus to the input inside
+					const input = firstErrorCard.querySelector(
+						'input, textarea, select, .option-pill, .star',
+					);
+					if (input) input.focus();
+				}
+
+				return isValid;
+			}
+
+			// Navigate to next wizard section
+			function nextSection() {
+				if (!validateSection()) return;
+
+				// Save current progress answers to localStorage
+				saveAnswers(state.currentSurvey, state.answers);
+
+				// Fade out section transition
+				const mainContent =
+					document.querySelector('.survey-main') ||
+					document.querySelector('.survey-main-inline');
+				mainContent.style.transition =
+					'opacity 300ms ease-out, transform 300ms ease-out';
+				mainContent.style.opacity = '0';
+				mainContent.style.transform = 'translateY(16px)';
+
+				setTimeout(() => {
+					state.currentSectionIndex++;
+					// Keep track of index position to allow user resuming
+					localStorage.setItem(
+						`voyana_survey_${state.currentSurvey}_index`,
+						state.currentSectionIndex,
+					);
+
+					renderSection(state.currentSectionIndex);
+
+					mainContent.style.opacity = '1';
+					mainContent.style.transform = 'translateY(0)';
+				}, 300);
+			}
+
+			// Navigate back to previous wizard section
+			function prevSection() {
+				if (state.currentSectionIndex === 0) return;
+
+				const mainContent =
+					document.querySelector('.survey-main') ||
+					document.querySelector('.survey-main-inline');
+				mainContent.style.transition =
+					'opacity 300ms ease-out, transform 300ms ease-out';
+				mainContent.style.opacity = '0';
+				mainContent.style.transform = 'translateY(16px)';
+
+				setTimeout(() => {
+					state.currentSectionIndex--;
+					localStorage.setItem(
+						`voyana_survey_${state.currentSurvey}_index`,
+						state.currentSectionIndex,
+					);
+
+					renderSection(state.currentSectionIndex);
+
+					mainContent.style.opacity = '1';
+					mainContent.style.transform = 'translateY(0)';
+				}, 300);
+			}
+
+			// Submit Survey Responses to Google Sheet via Apps Script Web App
+			async function submitSurvey() {
+				if (!validateSection()) return;
+
+				const submitBtn = document.querySelector('.btn-primary');
+				const originalBtnText = submitBtn.innerHTML;
+
+				// Update UI loading state
+				submitBtn.disabled = true;
+				submitBtn.innerHTML = `
+        Submitting... 
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="spinner" style="animation: spin 1s linear infinite; margin-left: 8px; display: inline-block;">
+          <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+          <path d="M4 12a8 8 0 018-8v8H4z" fill="currentColor"></path>
+        </svg>
+      `;
+
+				// ⚠️ REPLACE THIS WITH YOUR COPIED GOOGLE APPS SCRIPT WEB APP URL
+				const SCRIPT_URL =
+					'https://script.google.com/macros/s/AKfycbxgsUE3Z4kMwr_72mV34l1NfygDCOD-MYF8x8qmFz68MuNHA4MzPYcBTNuEltCegXuw4g/exec';
+
+				try {
+					const payload = {
+						surveyType: state.currentSurvey, // 'cafe', 'tour', 'travel', 'tourist'
+						answers: state.answers,
+					};
+
+					// We use text/plain content type to bypass CORS precheck restrictions of Apps Script Web Apps
+					const response = await fetch(SCRIPT_URL, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'text/plain;charset=utf-8',
+						},
+						body: JSON.stringify(payload),
+					});
+
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+
+					const result = await response.json();
+
+					if (result.success) {
+						// Save final responses to localStorage just in case
+						saveAnswers(state.currentSurvey, state.answers);
+
+						// Clear local storage states upon successful submission
+						localStorage.removeItem(
+							`voyana_survey_${state.currentSurvey}_index`,
+						);
+						localStorage.removeItem(
+							`voyana_survey_${state.currentSurvey}_answers`,
+						);
+
+						// Render the Thank You card
+						renderThankYou();
+					} else {
+						throw new Error(
+							result.error || 'Unknown Apps Script processing error.',
+						);
+					}
+				} catch (error) {
+					console.error('Submission failed:', error);
+					alert(
+						'We encountered an issue saving your responses. Please try submitting again.',
+					);
+
+					// Reset UI state
+					submitBtn.disabled = false;
+					submitBtn.innerHTML = originalBtnText;
+				}
+			}
+
+			// Render confirmation thank-you screen
+			function renderThankYou() {
+				const container = document.getElementById('app');
+				const meta = SURVEY_META[state.currentSurvey];
+
+				container.innerHTML = `
         <div class="thankyou-card">
           <div class="success-icon-wrapper">✓</div>
           <h2 class="thankyou-title">Thank you!</h2>
@@ -2950,35 +3050,37 @@
           </button>
         </div>
       `;
-    }
+			}
 
-    // Reset hash to go home
-    function navigateHome() {
-      window.location.hash = '';
-    }
+			// Reset hash to go home
+			function navigateHome() {
+				window.location.hash = '';
+			}
 
-    // ── 6. LOCAL STORAGE MANAGERS ──────────────────────────────────────
-    function saveAnswers(type, answers) {
-      localStorage.setItem(`voyana_survey_${type}_answers`, JSON.stringify(answers));
-    }
+			// ── 6. LOCAL STORAGE MANAGERS ──────────────────────────────────────
+			function saveAnswers(type, answers) {
+				localStorage.setItem(
+					`voyana_survey_${type}_answers`,
+					JSON.stringify(answers),
+				);
+			}
 
-    function loadAnswers(type) {
-      const stored = localStorage.getItem(`voyana_survey_${type}_answers`);
-      return stored ? JSON.parse(stored) : null;
-    }
+			function loadAnswers(type) {
+				const stored = localStorage.getItem(`voyana_survey_${type}_answers`);
+				return stored ? JSON.parse(stored) : null;
+			}
 
-    // Listen to changes in viewport to adapt side panel layouts dynamically
-    window.addEventListener('resize', () => {
-      if (state.currentSurvey && !state.isSubmitted) {
-        // Rerender layout skeleton to fit wide vs narrow desktop viewports
-        renderSurvey(state.currentSurvey);
-      }
-    });
+			// Listen to changes in viewport to adapt side panel layouts dynamically
+			window.addEventListener('resize', () => {
+				if (state.currentSurvey && !state.isSubmitted) {
+					// Rerender layout skeleton to fit wide vs narrow desktop viewports
+					renderSurvey(state.currentSurvey);
+				}
+			});
 
-    // ── 7. INITIALIZE ROUTING ──────────────────────────────────────────
-    window.addEventListener('hashchange', router);
-    document.addEventListener('DOMContentLoaded', router);
-  </script>
-
-</body>
+			// ── 7. INITIALIZE ROUTING ──────────────────────────────────────────
+			window.addEventListener('hashchange', router);
+			document.addEventListener('DOMContentLoaded', router);
+		</script>
+	</body>
 </html>
