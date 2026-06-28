@@ -2,9 +2,30 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-CTN1V97GR7"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'G-CTN1V97GR7');
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>TruVoy Research Surveys - Shape the Future of Travel</title>
 		<meta name="description" content="Help shape the future of travel discovery in India. Share your insights in our research surveys for Cafes, Tour Providers, and Travelers." />
+		<script type="text/javascript">
+			(function (c, l, a, r, i, t, y) {
+				c[a] = c[a] || function () {
+					(c[a].q = c[a].q || []).push(arguments);
+				};
+				t = l.createElement(r);
+				t.async = 1;
+				t.src = 'https://www.clarity.ms/tag/' + i;
+				y = l.getElementsByTagName(r)[0];
+				y.parentNode.insertBefore(t, y);
+			})(window, document, 'clarity', 'script', 'xe8g89xkcg');
+		</script>
 		
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
@@ -2933,16 +2954,18 @@
 					const result = await response.json();
 
 					if (result.success) {
-						// Save final responses to localStorage just in case
-						saveAnswers(state.currentSurvey, state.answers);
 
-						// Clear local storage states upon successful submission
+						// Clear draft local storage states upon successful submission
 						localStorage.removeItem(
 							`truvoy_survey_${state.currentSurvey}_index`,
 						);
 						localStorage.removeItem(
 							`truvoy_survey_${state.currentSurvey}_answers`,
 						);
+
+						// Reset in-memory state
+						state.answers = {};
+						state.currentSectionIndex = 0;
 
 						// Render the Thank You card
 						renderThankYou();
@@ -2963,6 +2986,7 @@
 				}
 			}
 
+
 			// Render confirmation thank-you screen
 			function renderThankYou() {
 				const container = document.getElementById('app');
@@ -2976,7 +3000,7 @@
             Your responses to the <strong>${meta.title} Survey</strong> have been successfully submitted. We appreciate your valuable time and feedback to help shape TruVoy.
           </p>
           <button class="btn btn-primary" onclick="window.location.href='index.html'">
-            Visit Us
+            Visit Website
           </button>
         </div>
       `;
