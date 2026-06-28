@@ -3,7 +3,20 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>TruVoy Research Surveys</title>
+		<title>TruVoy Research Surveys - Shape the Future of Travel</title>
+		<meta name="description" content="Help shape the future of travel discovery in India. Share your insights in our research surveys for Cafes, Tour Providers, and Travelers." />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="TruVoy Research Surveys - Shape the Future of Travel" />
+		<meta property="og:description" content="Help shape the future of travel discovery in India. Share your insights in our research surveys for Cafes, Tour Providers, and Travelers." />
+		<meta property="og:image" content="https://cdn.prod.website-files.com/671746351f3baab437ce6ff4/674eace7ad445fc967c879e1_Screenshot%202024-12-03%20at%2015.01.31.avif" />
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="TruVoy Research Surveys - Shape the Future of Travel" />
+		<meta name="twitter:description" content="Help shape the future of travel discovery in India. Share your insights in our research surveys for Cafes, Tour Providers, and Travelers." />
+		<meta name="twitter:image" content="https://cdn.prod.website-files.com/671746351f3baab437ce6ff4/674eace7ad445fc967c879e1_Screenshot%202024-12-03%20at%2015.01.31.avif" />
 		<link
 			href="images/favicon.png"
 			rel="shortcut icon"
@@ -824,6 +837,21 @@
 					category: cat,
 					questions: sectionsMap[cat],
 				}));
+			}
+
+			// Helper to block emojis from text input and textarea fields
+			function blockEmojis(element) {
+				const emojiRegex = /\p{Extended_Pictographic}/gu;
+				element.addEventListener('input', (e) => {
+					const val = e.target.value;
+					if (emojiRegex.test(val)) {
+						const cleanVal = val.replace(emojiRegex, '');
+						const start = e.target.selectionStart;
+						e.target.value = cleanVal;
+						const diff = val.length - cleanVal.length;
+						e.target.setSelectionRange(start - diff, start - diff);
+					}
+				});
 			}
 
 			const SURVEYS = {
@@ -2387,6 +2415,7 @@
 					input.value = savedVal || '';
 					input.placeholder = 'Type your response here...';
 					input.setAttribute('aria-required', 'true');
+					blockEmojis(input);
 					input.addEventListener('input', (e) => {
 						state.answers[stateKey] = e.target.value;
 						// Clear validation borders dynamically on edit
@@ -2401,6 +2430,7 @@
 					textarea.value = savedVal || '';
 					textarea.placeholder = 'Write your detailed feedback here...';
 					textarea.setAttribute('aria-required', 'true');
+					blockEmojis(textarea);
 					textarea.addEventListener('input', (e) => {
 						state.answers[stateKey] = e.target.value;
 						if (e.target.value.trim()) {
@@ -2564,6 +2594,7 @@
 					otherInput.placeholder = 'Please specify...';
 					otherInput.className = 'other-text-input';
 					otherInput.style.width = '100%';
+					blockEmojis(otherInput);
 					otherInputContainer.appendChild(otherInput);
 
 					// Initial setup for loaded values
