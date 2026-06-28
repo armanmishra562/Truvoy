@@ -3,53 +3,60 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Voyana Research Surveys</title>
+		<title>TruVoy Research Surveys</title>
+		<link
+			href="docs/logo.png"
+			rel="shortcut icon"
+			type="image/png" />
+		<link
+			href="docs/logo.png"
+			rel="apple-touch-icon" />
 
 		<!-- Google Fonts -->
 		<link
-			href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600&display=swap"
 			rel="stylesheet" />
 
 		<style>
 			/* ── 1. CSS VARIABLES & RESET ────────────────────────────────────── */
 			:root {
 				/* Backgrounds */
-				--color-bg-primary: #f5f0e8; /* warm parchment */
-				--color-bg-secondary: #ede8dc; /* slightly deeper cream */
-				--color-bg-card: #faf7f2; /* near-white warm */
-				--color-warm-white: #fffdf8; /* warm white */
+				--color-bg-primary: #f6f2ee; /* warm cream/beige matching index page background */
+				--color-bg-secondary: #e4e2df; /* warm grey matching stylesheet */
+				--color-bg-card: #ffffff; /* white card background */
+				--color-warm-white: #ffffff; /* white */
 
-				/* Greens — primary brand color */
-				--color-green-dark: #1f3b2f; /* deep forest green */
-				--color-green-mid: #2e5440; /* mid green */
-				--color-green-light: #4a7c60; /* lighter green */
+				/* Teal/Green — primary brand color */
+				--color-green-dark: #2d464c; /* deep teal-green */
+				--color-green-mid: #3d5e66; /* slightly lighter teal-green */
+				--color-green-light: #5b7e87; /* lighter teal-green */
 
 				/* Text */
-				--color-text-primary: #1a2e22; /* near-black green-tinted */
-				--color-text-secondary: #5c6b5e; /* muted green-grey */
-				--color-text-muted: #9aa89c; /* soft grey-green */
+				--color-text-primary: #2e4449; /* deep text color matching index page */
+				--color-text-secondary: #5a6d72; /* muted text color */
+				--color-text-muted: #8ba2a8; /* soft placeholder text color */
 
 				/* Warm Accents */
-				--color-sand: #c8b89a; /* warm sand */
-				--color-sand-light: #e0d5c4; /* light sand */
+				--color-sand: #e6bfae; /* pink-sand matching index page accent */
+				--color-sand-light: #f0dbd3; /* lighter shade of pink-sand for soft borders */
 				--color-error: #a34839; /* warm brick red for validation errors */
 				--color-error-bg: #faf3f2;
 
 				/* Interactive */
-				--color-cta-bg: #1f3b2f;
-				--color-cta-text: #f5f0e8;
-				--color-cta-hover: #2e5440;
-				--color-active: #4a7c60;
-				--color-progress: #2e5440;
-				--color-focus-ring: rgba(46, 84, 64, 0.25);
+				--color-cta-bg: #2d464c; /* matching deep teal-green */
+				--color-cta-text: #f6f2ee; /* matching background color */
+				--color-cta-hover: #3d5e66; /* matching mid green-teal */
+				--color-active: #e6bfae; /* selected radio/checkbox option pill accent */
+				--color-progress: #2d464c; /* progress bar fill */
+				--color-focus-ring: rgba(45, 70, 76, 0.25);
 
 				/* Shadows */
-				--shadow-card: 0 4px 20px rgba(31, 59, 47, 0.05);
-				--shadow-hover: 0 12px 32px rgba(31, 59, 47, 0.1);
+				--shadow-card: 0 4px 20px rgba(45, 70, 76, 0.05);
+				--shadow-hover: 0 12px 32px rgba(45, 70, 76, 0.1);
 
 				/* Fonts */
-				--font-display: 'Cormorant Garamond', Georgia, serif;
-				--font-body: 'DM Sans', sans-serif;
+				--font-display: 'Playfair Display', Georgia, serif;
+				--font-body: 'Work Sans', sans-serif;
 			}
 
 			* {
@@ -59,7 +66,7 @@
 			}
 
 			body {
-				background: linear-gradient(160deg, #f5f0e8 0%, #ede5d4 100%);
+				background: linear-gradient(160deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
 				font-family: var(--font-body);
 				color: var(--color-text-primary);
 				min-height: 100vh;
@@ -2340,7 +2347,7 @@
 
 					// Get last saved section index from local storage to resume
 					const savedIndex = localStorage.getItem(
-						`voyana_survey_${hash}_index`,
+						`truvoy_survey_${hash}_index`,
 					);
 					state.currentSectionIndex = savedIndex ? parseInt(savedIndex, 10) : 0;
 
@@ -2362,7 +2369,7 @@
 				container.innerHTML = `
         <div class="landing-container">
           <header class="landing-header">
-            <div class="landing-logo">Voyana Research</div>
+            <div class="landing-logo">TruVoy Research</div>
             <h1 class="landing-title">Help us shape the future of local travel.</h1>
             <p class="landing-subtitle">
               Select the survey below that best describes your profile. Your inputs help us build a simpler, safer, and more trusted travel ecosystem.
@@ -2411,7 +2418,7 @@
             <div class="survey-sidebar">
               <div class="survey-sidebar-inner">
                 <div class="brand-bar">
-                  <a href="#" class="logo-link">Voyana</a>
+                  <a href="#" class="logo-link">TruVoy</a>
                   <span class="survey-name">${meta.title}</span>
                 </div>
                 <div class="category-stepper-container">
@@ -2437,7 +2444,7 @@
           <div class="survey-wrapper">
             <header class="survey-header">
               <div class="brand-bar">
-                <a href="#" class="logo-link">Voyana</a>
+                <a href="#" class="logo-link">TruVoy</a>
                 <span class="survey-name">${meta.title}</span>
               </div>
               <div class="category-stepper-container">
@@ -2573,12 +2580,14 @@
         </button>
       `;
 
-				// Smooth scroll back to top of main area
-				const scrollTarget =
-					window.innerWidth >= 1441
-						? document.querySelector('.survey-main')
-						: window;
-				scrollTarget.scrollTo({ top: 0, behavior: 'smooth' });
+				// Robust scroll back to top of main area, window, and body to ensure top placement on all devices and browsers
+				const mainContainer = document.querySelector('.survey-main');
+				if (mainContainer) {
+					mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
+				}
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+				document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+				document.body.scrollTo({ top: 0, behavior: 'smooth' });
 			}
 
 			// Render corresponding form input components based on Question data
@@ -2923,7 +2932,7 @@
 					state.currentSectionIndex++;
 					// Keep track of index position to allow user resuming
 					localStorage.setItem(
-						`voyana_survey_${state.currentSurvey}_index`,
+						`truvoy_survey_${state.currentSurvey}_index`,
 						state.currentSectionIndex,
 					);
 
@@ -2949,7 +2958,7 @@
 				setTimeout(() => {
 					state.currentSectionIndex--;
 					localStorage.setItem(
-						`voyana_survey_${state.currentSurvey}_index`,
+						`truvoy_survey_${state.currentSurvey}_index`,
 						state.currentSectionIndex,
 					);
 
@@ -3008,10 +3017,10 @@
 
 						// Clear local storage states upon successful submission
 						localStorage.removeItem(
-							`voyana_survey_${state.currentSurvey}_index`,
+							`truvoy_survey_${state.currentSurvey}_index`,
 						);
 						localStorage.removeItem(
-							`voyana_survey_${state.currentSurvey}_answers`,
+							`truvoy_survey_${state.currentSurvey}_answers`,
 						);
 
 						// Render the Thank You card
@@ -3043,7 +3052,7 @@
           <div class="success-icon-wrapper">✓</div>
           <h2 class="thankyou-title">Thank you!</h2>
           <p class="thankyou-text">
-            Your responses to the <strong>${meta.title} Survey</strong> have been successfully submitted. We appreciate your valuable time and feedback to help shape Voyana.
+            Your responses to the <strong>${meta.title} Survey</strong> have been successfully submitted. We appreciate your valuable time and feedback to help shape TruVoy.
           </p>
           <button class="btn btn-primary" onclick="window.location.href='index.html'">
             Visit Us
@@ -3060,13 +3069,13 @@
 			// ── 6. LOCAL STORAGE MANAGERS ──────────────────────────────────────
 			function saveAnswers(type, answers) {
 				localStorage.setItem(
-					`voyana_survey_${type}_answers`,
+					`truvoy_survey_${type}_answers`,
 					JSON.stringify(answers),
 				);
 			}
 
 			function loadAnswers(type) {
-				const stored = localStorage.getItem(`voyana_survey_${type}_answers`);
+				const stored = localStorage.getItem(`truvoy_survey_${type}_answers`);
 				return stored ? JSON.parse(stored) : null;
 			}
 
