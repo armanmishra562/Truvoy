@@ -804,8 +804,28 @@
 		<div id="app"></div>
 
 		<script>
-			// ── 1. SURVEY DATA ──────────────────────────────────────────────
-			// Embedded pre-parsed JavaScript objects
+			// Helper to auto-generate category sections from a flat list of questions
+			function autoGenerateSections(flatQuestions) {
+				const sectionsMap = {};
+				const order = [];
+				flatQuestions.forEach((q) => {
+					const cat = q.category || 'General';
+					if (!sectionsMap[cat]) {
+						sectionsMap[cat] = [];
+						order.push(cat);
+					}
+					sectionsMap[cat].push({
+						q: q.q,
+						type: q.type,
+						options: q.options || [],
+					});
+				});
+				return order.map((cat) => ({
+					category: cat,
+					questions: sectionsMap[cat],
+				}));
+			}
+
 			const SURVEYS = {
 				cafe: [
 					{
@@ -1311,154 +1331,150 @@
 						],
 					},
 				],
-				tour: [
+				tour: autoGenerateSections([
 					{
 						category: 'Business Profile',
-						questions: [
-							{
-								q: 'What type of services do you provide?',
-								type: 'dropdown',
-								options: [
-									'Tour Operator',
-									'Activity Provider',
-									'Transport Provider',
-									'Rental Service',
-									'Other',
-								],
-							},
-							{
-								q: 'How do customers currently discover your services?',
-								type: 'dropdown',
-								options: [
-									'Word of mouth',
-									'Social media (Instagram/FB)',
-									'Google Search/Maps',
-									'Local guides/Referrals',
-									'Other platforms',
-								],
-							},
+						q: 'What type of travel business do you operate?',
+						type: 'radio',
+						options: [
+							'Travel Agency',
+							'Independant Tour Operator',
+							'Destination Management Company (DMC)',
+							'Freelance/Independent Travel Planner',
+							'Other',
 						],
 					},
 					{
-						category: 'Challenges',
-						questions: [
-							{
-								q: 'What is your biggest business challenge?',
-								type: 'dropdown',
-								options: [
-									'Finding new customers',
-									'High marketing/advertising costs',
-									'Seasonal demand fluctuations',
-									'Managing bookings & scheduling',
-									'Competition from big platforms',
-								],
-							},
+						category: 'Business Profile',
+						q: 'How long have you been in business?',
+						type: 'radio',
+						options: [
+							'Less than 1 year',
+							'1–3 years',
+							'3–5 years',
+							'More than 5 years',
 						],
 					},
 					{
-						category: 'App Validation',
-						questions: [
-							{
-								q: 'Would you list your services on a tourism comparison platform?',
-								type: 'rating',
-								options: [],
-							},
-							{
-								q: 'What would encourage you to join such a platform?',
-								type: 'dropdown',
-								options: [
-									'More direct booking volume',
-									'Lower booking commissions',
-									'Better brand visibility',
-									'Easy digital management tools',
-									'Access to tourist travel data',
-								],
-							},
-							{
-								q: 'What tools would help your business most?',
-								type: 'dropdown',
-								options: [
-									'Online booking & payment system',
-									'Customer reviews manager',
-									'AI pricing recommendations',
-									'Real-time demand analytics dashboard',
-									'SMS/WhatsApp reminders for bookings',
-								],
-							},
-							{
-								q: 'Would you like customers to compare your services with competitors?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
+						category: 'Business Profile',
+						q: 'Which destinations/categories do you specialize in?',
+						type: 'checkbox',
+						options: [
+							'Domestic Tours',
+							'International Tours',
+							'Adventure/Experiential Travel',
+							'Customized/Honeymoon Tours',
+							'Other',
 						],
 					},
 					{
-						category: 'Revenue Validation',
-						questions: [
-							{
-								q: 'Would you pay for premium visibility or featured listings?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
-							{
-								q: 'What concerns would you have before joining?',
-								type: 'dropdown',
-								options: [
-									'High setup or monthly costs',
-									'Technical difficulty of using the app',
-									'Customer data privacy',
-									'Whether tourists will actually use it',
-									'Other',
-								],
-							},
-							{
-								q: 'What payment model do you prefer?',
-								type: 'dropdown',
-								options: [
-									'Flat monthly subscription',
-									'Commission per booking',
-									'Hybrid (low subscription + low commission)',
-									'Pay-per-lead / Pay-per-click',
-								],
-							},
-							{
-								q: 'Would analytics about customer trends & demand help your business?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
-							{
-								q: 'Would AI-based pricing recommendations help you?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
+						category: 'Business Profile',
+						q: 'Approximate monthly customer inquiries received?',
+						type: 'radio',
+						options: [
+							'Less than 50',
+							'50–200',
+							'200–500',
+							'More than 500',
 						],
 					},
 					{
-						category: 'Product Experience',
-						questions: [
-							{
-								q: 'Would you join as an early launch partner?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
+						category: 'Business Profile',
+						q: 'How do customers currently discover your business?',
+						type: 'checkbox',
+						options: [
+							'Referrals/Word of Mouth',
+							'Social Media',
+							'Google Search/Website',
+							'Online Travel Platforms',
+							'Other',
 						],
 					},
 					{
-						category: '',
-						questions: [
-							{
-								q: 'Existing tools or app',
-								type: 'text',
-								options: [],
-							},
-							{
-								q: 'Feedback',
-								type: 'text',
-								options: [],
-							},
+						category: 'Current Platforms & Challenges',
+						q: 'Do existing travel marketplaces/ apps/ platforms provide enough insights for platform?',
+						type: 'radio',
+						options: [
+							'Yes, completely',
+							'Somewhat',
+							'Very little',
+							'Not at all',
 						],
 					},
-				],
+					{
+						category: 'Current Platforms & Challenges',
+						q: 'Please tell us which platform do your use for posting?',
+						type: 'checkbox',
+						options: [
+							'Own Site',
+							'Travel triangle',
+							'Booking.com',
+							'Other',
+						],
+					},
+					{
+						category: 'Current Platforms & Challenges',
+						q: 'What do you dislike most about existing travel platforms?',
+						type: 'checkbox',
+						options: [
+							'High Commission Charges',
+							'Poor Quality Leads',
+							'Lack of Transparency',
+							'Limited Business Support Tools',
+							'Other',
+						],
+					},
+					{
+						category: 'Platform Validation',
+						q: 'If given an opportunity, would you list your packages on a package comparison platform?',
+						type: 'radio',
+						options: [
+							'Definitely Yes',
+							'Probably Yes',
+							'Maybe',
+							'No',
+						],
+					},
+					{
+						category: 'Platform Validation',
+						q: 'Would you be willing to pay a commission or subscription fee if a platform helps you generate more quality bookings?',
+						type: 'radio',
+						options: [
+							'Definitely Yes',
+							'Probably Yes',
+							'Maybe',
+							'No',
+						],
+					},
+					{
+						category: 'Platform Validation',
+						q: 'Please telll us about your current source of lead generation, any feedback for the same?',
+						type: 'checkbox',
+						options: [
+							'Referrals & Existing Customers',
+							'Social Media Marketing',
+							'Google Ads/SEO',
+							'Online Marketplaces/Platforms',
+							'Feedback',
+						],
+					},
+					{
+						category: 'Feature Preferences',
+						q: 'If you could have a one-stop place to discover past and present standpoint of your business, which features would you prefer the most (select any 5)',
+						type: 'checkbox',
+						options: [
+							'Best performing tours by revenue',
+							'Seasonal revenue trends',
+							'Best performing tours by bookings',
+							'Least performing tours',
+							'Customer satisfaction / rating trends',
+							'Quick action — confirmation, cancellation per tour',
+							'Upcoming tours with headcount (booking per tour)',
+							'Feedback (Recent reviews in one place)',
+							'Other',
+						],
+					},
+				]),
 				tourist: [
 					{
 						category: 'Traveller Profile',
@@ -2070,236 +2086,6 @@
 						],
 					},
 				],
-				travel: [
-					{
-						category: 'Business Profile',
-						questions: [
-							{
-								q: 'What type of travel business do you operate?',
-								type: 'dropdown',
-								options: [
-									'Travel Agency',
-									'Tour Operator',
-									'DMC (Destination Management Company)',
-									'Independent Agent',
-									'Other',
-								],
-							},
-							{
-								q: 'How long have you been in business?',
-								type: 'dropdown',
-								options: [
-									'Less than 1 year',
-									'1–3 years',
-									'3–5 years',
-									'5–10 years',
-									'More than 10 years',
-								],
-							},
-							{
-								q: 'Which destinations/categories do you specialize in?',
-								type: 'dropdown',
-								options: [
-									'Domestic Tours',
-									'International Tours',
-									'Adventure Travel',
-									'Spiritual/Honeymoon',
-									'Luxury Packages',
-									'Customized Itineraries',
-								],
-							},
-							{
-								q: 'Approximate monthly customer inquiries received?',
-								type: 'dropdown',
-								options: [
-									'Less than 50',
-									'50–100',
-									'100–500',
-									'500–1000',
-									'More than 1000',
-								],
-							},
-						],
-					},
-					{
-						category: 'Challenges',
-						questions: [
-							{
-								q: 'What are your biggest business challenges today?',
-								type: 'dropdown',
-								options: [
-									'High B2C lead acquisition costs',
-									'High B2B agent platform commissions',
-									'Operational inefficiencies',
-									'Client trust & booking cancellations',
-									'Finding reliable local suppliers',
-								],
-							},
-							{
-								q: 'How do customers currently discover your business?',
-								type: 'dropdown',
-								options: [
-									'Google Maps / Local Search',
-									'Social Media (Instagram/FB)',
-									'Referrals / Word of mouth',
-									'B2B travel agents',
-									'Offline marketing/flyers',
-								],
-							},
-							{
-								q: 'Do existing travel marketplaces provide enough value?',
-								type: 'radio',
-								options: ['Yes', 'No'],
-							},
-							{
-								q: 'What do you dislike most about existing travel platforms?',
-								type: 'textarea',
-								options: [],
-							},
-						],
-					},
-					{
-						category: 'App Validation',
-						questions: [
-							{
-								q: 'Would you list your packages on a package comparison platform?',
-								type: 'rating',
-								options: [],
-							},
-							{
-								q: 'What would motivate you most to join such a platform?',
-								type: 'dropdown',
-								options: [
-									'More high-intent tourist enquiries',
-									'Lower commission models than standard sites',
-									'Tools to build and share custom itineraries',
-									'Verified customer review badges',
-									'Access to tourist trend data',
-								],
-							},
-							{
-								q: 'Which feature would be most valuable for your business?',
-								type: 'dropdown',
-								options: [
-									'AI itinerary builder & planner',
-									'Supplier directory / partner matching',
-									'Dynamic packaging & pricing tools',
-									'Customer CRM & booking dashboard',
-									'Integrated payment gateway',
-								],
-							},
-							{
-								q: 'Would AI-based pricing and demand insights help your business?',
-								type: 'radio',
-								options: ['Yes', 'No'],
-							},
-							{
-								q: 'How important is customer trust & verification?',
-								type: 'rating',
-								options: [],
-							},
-						],
-					},
-					{
-						category: 'Revenue Validation',
-						questions: [
-							{
-								q: 'Which payment model would you prefer?',
-								type: 'dropdown',
-								options: [
-									'Flat monthly subscription',
-									'Commission per booking',
-									'Hybrid model',
-									'Pay-per-lead / Pay-per-inquiry',
-								],
-							},
-							{
-								q: 'Would you pay for premium tools if they get you more bookings or enquiries ?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
-							{
-								q: 'Which premium tools would you pay for?',
-								type: 'dropdown',
-								options: [
-									'AI Pricing Recommendations',
-									'Verified Badge / Trusted Seller',
-									'SEO/Marketing boost',
-									'Advanced Analytics & Demand forecasts',
-								],
-							},
-							{
-								q: 'What monthly amount would you realistically pay for useful business tools?',
-								type: 'dropdown',
-								options: [
-									'₹0 (Free only)',
-									'Up to ₹1,000',
-									'₹1,000 – ₹2,500',
-									'₹2,500 – ₹5,000',
-									'Above ₹5,000',
-								],
-							},
-						],
-					},
-					{
-						category: 'Product Experience',
-						questions: [
-							{
-								q: 'How easy should package uploading be?',
-								type: 'dropdown',
-								options: [
-									'Extremely easy (bulk upload/excel)',
-									'Standard step-by-step form',
-									'API integration with existing system',
-								],
-							},
-							{
-								q: 'Would you prefer direct bookings, inquiries, or both?',
-								type: 'dropdown',
-								options: [
-									'Direct bookings only',
-									'Inquiries only',
-									'Both bookings & inquiries',
-								],
-							},
-							{
-								q: 'What would stop you from using such a platform?',
-								type: 'dropdown',
-								options: [
-									'High commissions',
-									'Complex onboarding / setup',
-									'Lack of customer traffic',
-									'Lack of control over pricing',
-								],
-							},
-							{
-								q: 'Would you join as an early beta partner?',
-								type: 'radio',
-								options: ['Yes', 'Maybe', 'No'],
-							},
-							{
-								q: 'Would you recommend such a platform to others?',
-								type: 'rating',
-								options: [],
-							},
-							{
-								q: 'Current apps you are using',
-								type: 'text',
-								options: [],
-							},
-							{
-								q: 'Feedbacks on current apps',
-								type: 'text',
-								options: [],
-							},
-							{
-								q: 'Current source of lead generation',
-								type: 'text',
-								options: [],
-							},
-						],
-					},
-				],
 			};
 
 			// In-memory labels mapping for survey selection cards
@@ -2319,16 +2105,11 @@
 					desc: 'For individuals who travel within India and explore regional destinations.',
 					icon: '🎒',
 				},
-				travel: {
-					title: 'Travel Agencies',
-					desc: 'For travel agents, trip planners, and B2B holiday package creators.',
-					icon: '✈️',
-				},
 			};
 
 			// ── 2. STATE ─────────────────────────────────────────────────────
 			let state = {
-				currentSurvey: null, // 'cafe' | 'tour' | 'tourist' | 'travel'
+				currentSurvey: null, // 'cafe' | 'tour' | 'tourist'
 				currentSectionIndex: 0,
 				answers: {}, // maps question index (or identifier) to response value
 				isSubmitted: false,
@@ -2338,7 +2119,7 @@
 			function router() {
 				const hash = window.location.hash.substring(1);
 
-				if (['cafe', 'tour', 'tourist', 'travel'].includes(hash)) {
+				if (['cafe', 'tour', 'tourist'].includes(hash)) {
 					state.currentSurvey = hash;
 					state.isSubmitted = false;
 
@@ -2738,15 +2519,85 @@
 
 					const isMulti = q.type === 'checkbox';
 
+					// Helper functions for conditional other inputs
+					const isOtherOption = (optStr) => {
+						const o = optStr.trim().toLowerCase();
+						if (o === 'other' || o === 'others' || o === 'other.') return true;
+						if (o.startsWith('specify') || o.startsWith('feedback') || o.includes('___')) return true;
+						if (o.startsWith('other.') || o.startsWith('other:') || o.startsWith('other,') || o.startsWith('others,')) return true;
+						if (o.endsWith('specify') || o.endsWith('specify:')) return true;
+						return false;
+					};
+
+					const getCleanPrefix = (optStr) => {
+						return optStr.replace(/[_:\s\.]+$/, '').trim();
+					};
+
+					const isOptionSelected = (optStr, val) => {
+						if (!val) return false;
+						if (isMulti) {
+							if (!Array.isArray(val)) return false;
+							return val.some(v => v === optStr || (isOtherOption(optStr) && v.startsWith(getCleanPrefix(optStr) + ':')));
+						}
+						return val === optStr || (isOtherOption(optStr) && val.startsWith(getCleanPrefix(optStr) + ':'));
+					};
+
+					const getOtherText = (optStr, val) => {
+						if (!val) return '';
+						const prefix = getCleanPrefix(optStr) + ': ';
+						if (isMulti) {
+							if (!Array.isArray(val)) return '';
+							const match = val.find(v => v.startsWith(prefix));
+							return match ? match.substring(prefix.length) : '';
+						}
+						return val.startsWith(prefix) ? val.substring(prefix.length) : '';
+					};
+
+					// Container for custom text input if needed
+					const otherInputContainer = document.createElement('div');
+					otherInputContainer.className = 'other-input-container';
+					otherInputContainer.style.marginTop = '12px';
+					otherInputContainer.style.display = 'none';
+
+					const otherInput = document.createElement('input');
+					otherInput.type = 'text';
+					otherInput.placeholder = 'Please specify...';
+					otherInput.className = 'other-text-input';
+					otherInput.style.width = '100%';
+					otherInputContainer.appendChild(otherInput);
+
 					// Initial setup for loaded values
 					let currentSelection = savedVal || (isMulti ? [] : null);
 
+					const updateOtherVisibility = () => {
+						let showOther = false;
+						let activeOtherOpt = null;
+
+						q.options.forEach((opt) => {
+							if (isOtherOption(opt)) {
+								const isSel = isMulti
+									? currentSelection.some(v => v === opt || v.startsWith(getCleanPrefix(opt) + ':'))
+									: (currentSelection === opt || (currentSelection && currentSelection.startsWith(getCleanPrefix(opt) + ':')));
+								if (isSel) {
+									showOther = true;
+									activeOtherOpt = opt;
+								}
+							}
+						});
+
+						if (showOther && activeOtherOpt) {
+							otherInputContainer.style.display = 'block';
+							otherInput.placeholder = activeOtherOpt.toLowerCase().includes('feedback') ? 'Provide your feedback here...' : 'Please specify...';
+							otherInput.value = getOtherText(activeOtherOpt, currentSelection);
+						} else {
+							otherInputContainer.style.display = 'none';
+							otherInput.value = '';
+						}
+					};
+
 					q.options.forEach((opt, oIdx) => {
 						const pill = document.createElement('div');
-
-						const isSelected = isMulti
-							? currentSelection.includes(opt)
-							: currentSelection === opt;
+						const isSelected = isOptionSelected(opt, currentSelection);
 
 						pill.className = `option-pill ${isSelected ? 'selected' : ''}`;
 						pill.setAttribute('role', isMulti ? 'checkbox' : 'radio');
@@ -2754,20 +2605,25 @@
 						pill.setAttribute('tabindex', '0');
 
 						pill.innerHTML = `
-            <div class="pill-indicator"></div>
-            <span>${opt}</span>
-          `;
+							<div class="pill-indicator"></div>
+							<span>${opt}</span>
+						`;
 
 						const handleSelection = () => {
 							if (isMulti) {
-								if (currentSelection.includes(opt)) {
-									currentSelection = currentSelection.filter(
-										(item) => item !== opt,
-									);
+								const cleanPrefix = getCleanPrefix(opt);
+								const existingIndex = currentSelection.findIndex(v => v === opt || v.startsWith(cleanPrefix + ':'));
+
+								if (existingIndex > -1) {
+									currentSelection.splice(existingIndex, 1);
 									pill.classList.remove('selected');
 									pill.setAttribute('aria-checked', 'false');
 								} else {
-									currentSelection.push(opt);
+									let valToPush = opt;
+									if (isOtherOption(opt) && otherInput.value.trim()) {
+										valToPush = cleanPrefix + ': ' + otherInput.value.trim();
+									}
+									currentSelection.push(valToPush);
 									pill.classList.add('selected');
 									pill.setAttribute('aria-checked', 'true');
 								}
@@ -2779,11 +2635,17 @@
 									el.setAttribute('aria-checked', 'false');
 								});
 
-								currentSelection = opt;
+								let valToSet = opt;
+								if (isOtherOption(opt) && otherInput.value.trim()) {
+									valToSet = getCleanPrefix(opt) + ': ' + otherInput.value.trim();
+								}
+								currentSelection = valToSet;
 								pill.classList.add('selected');
 								pill.setAttribute('aria-checked', 'true');
-								state.answers[stateKey] = opt;
+								state.answers[stateKey] = valToSet;
 							}
+
+							updateOtherVisibility();
 
 							// Check if there are answers to remove validation error styling
 							const hasResponse = isMulti
@@ -2806,7 +2668,35 @@
 						pillsGroup.appendChild(pill);
 					});
 
+					// Listen to text updates in specify input box
+					otherInput.addEventListener('input', (e) => {
+						const textVal = e.target.value.trim();
+						let activeOtherOpt = q.options.find(isOtherOption);
+						if (!activeOtherOpt) return;
+
+						const cleanPrefix = getCleanPrefix(activeOtherOpt);
+						const formattedVal = textVal ? (cleanPrefix + ': ' + textVal) : activeOtherOpt;
+
+						if (isMulti) {
+							// Find existing other option in array and update it
+							const existingIndex = currentSelection.findIndex(v => v === activeOtherOpt || v.startsWith(cleanPrefix + ':'));
+							if (existingIndex > -1) {
+								currentSelection[existingIndex] = formattedVal;
+							} else {
+								currentSelection.push(formattedVal);
+							}
+							state.answers[stateKey] = currentSelection;
+						} else {
+							currentSelection = formattedVal;
+							state.answers[stateKey] = formattedVal;
+						}
+					});
+
 					container.appendChild(pillsGroup);
+					container.appendChild(otherInputContainer);
+
+					// Run initial visibility update on load
+					updateOtherVisibility();
 				}
 
 				return container;
@@ -2992,7 +2882,7 @@
 
 				try {
 					const payload = {
-						surveyType: state.currentSurvey, // 'cafe', 'tour', 'travel', 'tourist'
+						surveyType: state.currentSurvey, // 'cafe', 'tour', 'tourist'
 						answers: state.answers,
 					};
 
